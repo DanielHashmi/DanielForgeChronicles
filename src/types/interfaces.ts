@@ -4,6 +4,7 @@ export interface MD_DATA {
     date: string;
     slug: string;
     image: string;
+    desc: string;
 }
 
 export interface Heading {

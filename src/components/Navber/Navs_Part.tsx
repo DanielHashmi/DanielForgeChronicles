@@ -24,7 +24,7 @@ const Navs_Part = () => {
             <div className={`items-center hidden lg:flex gap-12 justify-around`}>
                 {nav_btns.map((btn: string, index: number) => {
                     return (
-                        <Link className="hover:underline-offset-4 smooth hover:underline underline-offset-0" key={index} href={'/'}>{btn}</Link>
+                        <Link className="hover:underline-offset-4 smooth hover:underline underline-offset-0" key={index} href={`/${btn.toLowerCase()}`}>{btn}</Link>
                     )
                 })}
             </div>

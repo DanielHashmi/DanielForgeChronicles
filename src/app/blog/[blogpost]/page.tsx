@@ -1,7 +1,7 @@
 import Link from "next/link"
-import Navigation from "./Navigation"
+import Navigation from "@/components/Navigation"
 import Image from "next/image"
-import ToolBar from "./Navber/ToolBar"
+import ToolBar from "@/components/Navber/ToolBar"
 import PatrickHand_Regular from "@/app/fonts/Font_Objects/PatrickHand_Regular"
 import { notFound } from "next/navigation"
 
@@ -19,9 +19,8 @@ import { transformerCopyButton } from '@rehype-pretty/transformers'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 
-const Card = async () => {
-
-    const file_path = 'src/blogs/TailWindCSSSetup.md'
+const BlogPost = async ({ params }: any) => {
+    const file_path = `src/blogs/${params.blogpost}.md`
     if (!fs.existsSync(file_path)) {
         notFound()
         return;
@@ -68,8 +67,8 @@ const Card = async () => {
 
                     <h1 className={`${PatrickHand_Regular.className} md:text-5xl sm:text-4xl text-3xl font-bold`}>{data.title}</h1>
 
-                    <div className={`relative mr-8 sm:mr-0 xl:w-[60vw] md:h-[70vh] h-[30vh] sm:h-[40vh] dark:border-[#232323] card_shadow hover:shadow-none sm_scale transition-all duration-1000 cursor-pointer`}>
-                        <Image className="object-cover" src={data.image} alt="logo" fill />
+                    <div className={`relative mr-8 sm:mr-0 xl:w-[60vw] md:h-[70vh] h-[30vh] sm:h-[40vh] dark:border-background dark:shadow-[10px_10px_0_0_#ffffff66] shadow-[10px_10px_0_0_#83838366] border-4 border-white hover:shadow-none sm_scale transition-all duration-1000 cursor-pointer`}>
+                        <Image className="object-cover" src={`/${data.image}`} alt="logo" fill />
                     </div>
 
                     <p dangerouslySetInnerHTML={{ __html: html_file_content }} className={`${PatrickHand_Regular.className} dark:prose-invert prose md:prose-pre:w-[86vw] xl:prose-pre:w-[60vw] prose-p:w-[80vw] xl:prose-p:w-[57vw] tracking-wide text-xl mt-6 pl-2`}></p>
@@ -81,4 +80,4 @@ const Card = async () => {
     )
 }
 
-export default Card
+export default BlogPost

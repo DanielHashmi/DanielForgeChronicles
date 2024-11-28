@@ -11,6 +11,14 @@ html body[data-scroll-locked]{
   margin-right: 0px !important;
 }
 
+::-webkit-scrollbar{
+  background-color: transparent;
+  width: 2px;
+}
+::-webkit-scrollbar-thumb{
+  background-color: rgba(0, 0, 0, 0.101);
+  border-radius: 1rem;
+}
 .card_shadow {
   box-shadow: 15px 16px 0 0 #605f5f;
   border: 5px solid #ffffff;

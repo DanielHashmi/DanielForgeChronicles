@@ -23,7 +23,7 @@ const Ext_Navbar = () => {
     }, []);
 
     return (
-        <div ref={scrollRef} className="w-[90vw] border-t mt-4 overflow-hidden bg-[#00000005]">
+        <div ref={scrollRef} className="w-[90vw] mt-4 overflow-hidden bg-[#00000005]">
             <motion.div
                 drag={isDraggable ? 'x' : false}
                 dragConstraints={scrollRef.current ? { left: -width, right: 0 } : undefined}
