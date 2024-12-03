@@ -1,9 +1,10 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
 import { motion } from 'framer-motion';
+import Link from "next/link";
 
 const Ext_Navbar = () => {
-    const buttons = ['C++', 'Java', 'Python', 'Next.js', 'Nust.js', 'Framer Motion', 'GSAP', 'Tailwind.css', 'HTML', 'CSS'];
+    const buttons = ['React-Tilt', 'Regex', 'Redux-ToolKit', 'AOS-Scroll', 'NextAuth', 'Redux', 'React', 'Tailwind-CSS-Setup',];
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const [width, setWidth] = useState(0);
     const [isDraggable, setIsDraggable] = useState(false);
@@ -30,9 +31,9 @@ const Ext_Navbar = () => {
                 className={`w-[50rem] sm:w-[70rem] md:w-[90vw] flex justify-around p-2 font-bold text-sm lg:text-base`}
             >
                 {buttons.map((button, index) => (
-                    <div key={index} className="hover:underline cursor-pointer">
+                    <Link href={`/blog/${button}`} key={index} className="hover:underline cursor-pointer">
                         {button}
-                    </div>
+                    </Link>
                 ))}
             </motion.div>
         </div>

@@ -4,16 +4,50 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  caret-color: transparent;
 }
+
+.hover-container {
+  position: relative;
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: #f2f2f2;
+  color: black;
+  text-align: center;
+  padding: 5px;
+  border-radius: 2px;
+  border: 1px solid rgb(209, 209, 209);
+  position: absolute;
+  font-size: x-small;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.hover-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
 
 html body[data-scroll-locked]{
   overflow-y: visible !important;
   margin-right: 0px !important;
 }
-
+.success{
+  filter: saturate(0);
+}
 ::-webkit-scrollbar{
-  background-color: transparent;
   width: 2px;
+}
+::-webkit-scrollbar-track{
+  background-color: black;
 }
 ::-webkit-scrollbar-thumb{
   background-color: rgba(0, 0, 0, 0.101);

@@ -143,7 +143,7 @@ GoogleProvider({
 ```
 * **Purpose:** Integrates Google OAuth for authentication.
 
-* **Parameters:**
+* **Object Keys:**
   * **clientId:** The Google Client ID from environment variables (process.env.GOOGLE_ID).
 
   * **clientSecret:** The Google Client Secret from environment variables (process.env.GOOGLE_SECRET).
@@ -180,7 +180,7 @@ CredentialsProvider({
 
 * **Purpose:** Provides custom authentication using email and password.
 
-* **Parameters:**
+* **Object Keys:**
   * credentials: Object containing user credentials. In this case, it is an empty object {}, as the credentials are processed in the authorize function.
 
 * **authorize Function:**
@@ -263,7 +263,8 @@ export { handler as GET, handler as POST };
 
   * **GET:** Used for requests that retrieve data. In the context of authentication, **GET** requests be used to fetch the current session or user information.
   * **POST:** Used for requests that modify data. This is commonly used for sign-in or sign-out requests in authentication flows.
-
+  
+### We import this SessionProvider in the layout and wrap our whole app with this component because SessionProvider runs on client side
 
 ```typescript
 'use client'
@@ -280,7 +281,7 @@ const AuthWrapper = ({ children }: any) => {
 export default AuthWrapper
 ```
 
-
+## This is a simplified version of authOption
 ```typescript
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -304,27 +305,3 @@ export const authOption = {
 }; 
 ```
 
-```typescript
-import NextAuth from "next-auth/next";
-import { authOption } from "./authOptions";
-
-const handler = NextAuth(authOption);
-
-export { handler as GET, handler as POST };
-```
-
-
-```typescript
-'use client'
-import { SessionProvider } from "next-auth/react";
-
-const AuthWrapper = ({ children }: any) => {
-    return (
-        <SessionProvider>
-            {children}
-        </SessionProvider>
-    )
-}
-
-export default AuthWrapper
-```

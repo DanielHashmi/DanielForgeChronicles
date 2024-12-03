@@ -1,10 +1,12 @@
 'use client'
-import { MD_DATA } from "@/types/interfaces";
+import { MD_DATA, USER_GOOGLE_DATA } from "@/types/interfaces";
 import { createContext, Dispatch, ReactNode, useContext, useState } from "react"
 
 interface PropType {
     setShow_Navigator: Dispatch<boolean>;
     show_Navigator: boolean;
+    set_user_data: Dispatch<USER_GOOGLE_DATA>;
+    user_data: USER_GOOGLE_DATA;
     blog_data: { data: MD_DATA; content: string }[];
     setBlog_data: Dispatch<{ data: MD_DATA; content: string }[]>;
 }
@@ -14,8 +16,10 @@ export const contextHook = createContext<PropType | null>(null)
 export const BigProMan = ({ children }: { children: ReactNode }) => {
     const [show_Navigator, setShow_Navigator] = useState(false)
     const [blog_data, setBlog_data] = useState<{ data: MD_DATA; content: string }[]>()
+    const [user_data, set_user_data] = useState<USER_GOOGLE_DATA>();
+
     return (
-        <contextHook.Provider value={{ blog_data, setBlog_data, show_Navigator, setShow_Navigator } as PropType}>
+        <contextHook.Provider value={{ blog_data, setBlog_data, user_data, set_user_data, show_Navigator, setShow_Navigator } as PropType}>
             {children}
         </contextHook.Provider >
 

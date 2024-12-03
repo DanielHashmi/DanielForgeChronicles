@@ -1,10 +1,10 @@
 ---
 title: How to setup Tailwind CSS
 author: Daniel Hashmi
-date: 11/25/2024
-slug: TailWindCSSSetup
-image: danielcodeforge.png
-desc: This is a complete guide for nextauth, In which you can authenticate you app using nextauth, this is a step by step tutorial and walk through you don't need to worry.
+date: 11/30/2024
+slug: TailWind-CSS-Setup
+image: tailwind-css.png
+desc: This is TailwindCss setup, this will guide you how to setup tailwindcss in you project, very easily and well explained step by step tutorial.
 ---
 
 ## Step 1: Run the following commands.

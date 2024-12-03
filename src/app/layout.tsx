@@ -4,7 +4,7 @@ import { BigProMan } from "@/context/context";
 import Navbar from "@/components/Navber/Navbar";
 import ComicNeue_Regular from "./fonts/Font_Objects/ComicNeue_Regular";
 import { ThemeProvider } from "@/components/DarkMode/ThemeProvider";
-
+import SessionWrapper from "./api/auth/[...nextauth]/SessionWrapper";
 
 export const metadata: Metadata = {
   title: "DanielForgeChronicles",
@@ -21,17 +21,19 @@ export default function RootLayout({
       <body
         className={`${ComicNeue_Regular.className} antialiased overflow-x-hidden grid`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange>
+        <SessionWrapper>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange>
 
-          <BigProMan>
-            <Navbar />
-            {children}
-          </BigProMan>
-        </ThemeProvider>
+            <BigProMan>
+              <Navbar />
+              {children}
+            </BigProMan>
+          </ThemeProvider>
+        </SessionWrapper>
       </body>
     </html>
   );

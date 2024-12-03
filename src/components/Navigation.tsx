@@ -57,7 +57,7 @@ const Navigation = ({ html_file_content }: { html_file_content: string }) => {
         <div className={navigationClass}>
             <h3 className="font-bold text-xl px-6 pb-6 pt-4 text-nowrap">Content Navigation</h3>
             <div className="overflow-y-auto px-6 mb-4 gap-3 flex flex-col">
-                {headings.map((heading: Heading, index: number) => (
+                {headings.length === 0 ? <div>No Headings!</div> : headings.map((heading: Heading, index: number) => (
                     <a
                         key={index}
                         href={`#${heading.id}`}

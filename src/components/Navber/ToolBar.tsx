@@ -2,6 +2,7 @@
 import { useStore } from "@/context/context";
 import { useTheme } from "next-themes";
 import Image from "next/image"
+import { MouseEvent } from "react";
 
 const ToolBar = () => {
     const { setShow_Navigator, show_Navigator } = useStore();
@@ -14,7 +15,7 @@ const ToolBar = () => {
         '/align-right.svg'
     ]
 
-    const handleClick = (e: any) => {
+    const handleClick = (e: MouseEvent<HTMLDivElement>) => {
         if ((e.target as HTMLDivElement).dataset.src === '/align-right.svg') {
             setShow_Navigator(!show_Navigator);
         }
