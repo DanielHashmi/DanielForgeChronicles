@@ -67,7 +67,7 @@ export const checkSubscription = async (email: string) => {
     if (existingUser.subscribed) {
         return JSON.parse(JSON.stringify(existingUser));
     } else {
-        return undefined;
+        return false;
     }
 
 }

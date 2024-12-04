@@ -20,13 +20,17 @@ const Navs_Part = () => {
     const [showResource, setShowResource] = useState(false)
     const [sheet_open, setSheet_open] = useState(false);
     const { data: session } = useSession();
-    const { user_data, set_user_data } = useStore()
+    const { user_data, set_user_data } = useStore();
 
     useEffect(() => {
         const check_subscription = async () => {
             if (session) {
                 const res = await checkSubscription(session.user.email);
-                set_user_data(res);
+                if (!res) {
+                    set_user_data({ ...user_data, subscribed: false })
+                } else {
+                    set_user_data(res);
+                }
             }
         };
         check_subscription();
