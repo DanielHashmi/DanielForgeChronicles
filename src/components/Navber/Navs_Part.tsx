@@ -34,7 +34,7 @@ const Navs_Part = () => {
                 } else {
                     if (user_data?.subscribed !== false) {
                         set_user_data({
-                            ...user_data, 
+                            ...user_data,
                             subscribed: false,
                         });
                     }
@@ -46,8 +46,8 @@ const Navs_Part = () => {
 
     const nav_btns = [
         'Newsletter',
+        'Download',
         'Membership',
-        // 'Authenticate',
     ];
 
     const resources: RESOURCE_SM_CARD[] = [

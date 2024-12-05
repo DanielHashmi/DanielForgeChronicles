@@ -18,10 +18,10 @@ import { transformerCopyButton } from '@rehype-pretty/transformers'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import ComicNeue_Regular from "@/app/fonts/Font_Objects/ComicNeue_Regular"
-import Navigation from "../../../components/Navigation"
+import Navigation from "@/components/Navigation"
 
 const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) => {
-    const file_path = `src/blogs/${(await params).blogpost}.md`
+    const file_path = `public/blogs/${(await params).blogpost}.md`
     if (!fs.existsSync(file_path)) {
         notFound()
         return;

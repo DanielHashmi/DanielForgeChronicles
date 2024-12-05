@@ -3,16 +3,6 @@ import { MD_DATA } from "@/types/interfaces"
 import { get_books } from "@/actions/actions"
 import { useEffect, useState } from "react"
 import BookCard from "@/components/BookCard"
-import { transformerCopyButton } from "@rehype-pretty/transformers"
-import rehypeAutolinkHeadings from "rehype-autolink-headings"
-import rehypeDocument from "rehype-document"
-import rehypeFormat from "rehype-format"
-import rehypePrettyCode from "rehype-pretty-code"
-import rehypeSlug from "rehype-slug"
-import rehypeStringify from "rehype-stringify"
-import remarkParse from "remark-parse"
-import remarkRehype from "remark-rehype"
-import { unified } from "unified"
 import Button from "@/components/Button"
 import { useStore } from "@/context/context"
 import { useRouter } from "next/navigation"
@@ -24,7 +14,7 @@ const Book = () => {
     const [load, setLoad] = useState(6)
     const [book_data_objects_array, setBook_data_objects_array] = useState<{ data: MD_DATA, content: string }[]>([])
     const { status } = useSession()
-
+    
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/membership')
@@ -36,30 +26,7 @@ const Book = () => {
     useEffect(() => {
         const temp = async () => {
             const data: { data: MD_DATA, content: string }[] = (await get_books()).slice(0, load) // why im calling all data and then slicing it, this looks inefficient!
-
-            data.map(async (obj) => {
-                obj.content = (await unified()
-                    .use(remarkParse)
-                    .use(remarkRehype)
-                    .use(rehypeDocument)
-                    .use(rehypeFormat)
-                    .use(rehypeStringify)
-                    .use(rehypeAutolinkHeadings)
-                    .use(rehypeSlug)
-                    .use(rehypePrettyCode, {
-                        theme: 'material-theme',
-                        transformers: [
-                            transformerCopyButton({
-                                visibility: 'always',
-                                feedbackDuration: 3000,
-                            }),
-                        ],
-                    })
-                    .process(obj?.content)).toString();
-
-            })
-            setBook_data_objects_array(data)
-
+            setBook_data_objects_array(data);
         }
         temp()
     }, [load])

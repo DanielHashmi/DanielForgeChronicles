@@ -1,14 +1,24 @@
 'use server'
 import clientPromise from '@/mongodb/connect';
 import { BOOK_DB_DATA, MD_DATA_OBJ } from '@/types/interfaces';
+import { transformerCopyButton } from '@rehype-pretty/transformers';
 import fs from 'fs'
 import matter from 'gray-matter';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeDocument from 'rehype-document';
+import rehypeFormat from 'rehype-format';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+import rehypeStringify from 'rehype-stringify';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import { unified } from 'unified';
 
 // Blogs
 export const get_blogs = async () => {
-    const blog_data_objects_array = fs.readdirSync('src/blogs').map((file_name: string) => {
-        if (fs.existsSync(`src/blogs/${file_name}`) && file_name.endsWith('.md')) {
-            const { data } = matter(fs.readFileSync(`src/blogs/${file_name}`))
+    const blog_data_objects_array = fs.readdirSync('public/blogs').map((file_name: string) => {
+        if (fs.existsSync(`public/blogs/${file_name}`) && file_name.endsWith('.md')) {
+            const { data } = matter(fs.readFileSync(`public/blogs/${file_name}`))
             return { data }
         }
     }).sort((a, b) => Number(new Date((b as MD_DATA_OBJ).data.date)) - Number(new Date((a as MD_DATA_OBJ).data.date))) as MD_DATA_OBJ[];
@@ -17,12 +27,26 @@ export const get_blogs = async () => {
 }
 
 
+// Blogs Count
+export const get_blogs_count = async () => {
+    const blog_data_objects_array = fs.readdirSync('public/blogs');
+    return blog_data_objects_array.length;
+}
+
+
+// Books Count
+export const get_books_count = async () => {
+    const book_data_objects_array = fs.readdirSync('public/books');
+    return book_data_objects_array.length;
+}
+
+
 
 // Books
 export const get_books = async () => {
-    const book_data_objects_array = fs.readdirSync('src/books').map((file_name: string) => {
-        if (fs.existsSync(`src/books/${file_name}`) && file_name.endsWith('.md')) {
-            const { data, content } = matter(fs.readFileSync(`src/books/${file_name}`))
+    const book_data_objects_array = fs.readdirSync('public/books').map((file_name: string) => {
+        if (fs.existsSync(`public/books/${file_name}`) && file_name.endsWith('.md')) {
+            const { data, content } = matter(fs.readFileSync(`public/books/${file_name}`))
 
             return { data, content }
         }
@@ -46,6 +70,27 @@ export const get_books = async () => {
         if (!existingBook) {
             await db.collection("books").insertOne(data);
         }
+    })
+
+    book_data_objects_array.map(async (obj) => {
+        obj.content = (await unified()
+            .use(remarkParse)
+            .use(remarkRehype)
+            .use(rehypeDocument)
+            .use(rehypeFormat)
+            .use(rehypeStringify)
+            .use(rehypeAutolinkHeadings)
+            .use(rehypeSlug)
+            .use(rehypePrettyCode, {
+                theme: 'material-theme',
+                transformers: [
+                    transformerCopyButton({
+                        visibility: 'always',
+                        feedbackDuration: 3000,
+                    }),
+                ],
+            })
+            .process(obj?.content)).toString();
     })
 
     return book_data_objects_array;
@@ -128,8 +173,8 @@ export const getStarCount = async (email: string, slug: string) => {
     const db = client.db("danielforgechroniclesDB");
 
     const book_data = await db.collection("books").findOne({ "data.slug": slug });
-    if (book_data) {
-        return book_data.stared_users.length;
+    if (book_data?.stared_users) {
+        return book_data?.stared_users.length;
     }
     return 0;
 }

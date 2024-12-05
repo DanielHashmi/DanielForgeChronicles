@@ -8,7 +8,7 @@ import { checkStar, getStarCount, saveOrDeleteStar } from "@/actions/actions"
 import { useSession } from "next-auth/react"
 
 const BookCard = (props: { data: BOOK_DATA }) => {
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
     const { data: session } = useSession();
     const [alreadyStared, setAlreadyStared] = useState(false);
     const [starCount, setStarCount] = useState(0);

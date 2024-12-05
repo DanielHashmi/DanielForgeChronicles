@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const Newsletter = () => {
+const Download = () => {
     const { data: session } = useSession();
     const [is_user_subscribed_news, set_is_user_subscribed_news] = useState(false);
 
@@ -30,14 +30,14 @@ const Newsletter = () => {
     return (
         <div className="pt-[200px] text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
             <div className="flex p-6 gap-6 flex-col items-center">
-                <div className="text-4xl">Get Ahead</div>
+                <div className="text-4xl">Access Offline</div>
 
                 {/* News Send Card */}
                 <div className="bg-white dark:bg-[#292a2b] flex flex-col gap-4 smooth 5 h-fit max-w-[35rem] text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
                     <div className="flex flex-col gap-4">
-                        <div className="text-xl font-semibold">Subscribe to the Newsletter 📰</div>
+                        <div className="text-xl font-semibold">Download & Install DFC Locally 💻</div>
 
-                        <p>Get latest updates before others, By subscribing you will be informed when new content is available on DanielForgeChronicles.</p>
+                        <p>Want to access the content offline locally, Don't worry you can download & install DFC (DanielForgeChronicles) in any of your device platform independently.</p>
 
                         <div className="flex gap-6 flex-col sm:flex-row items-start sm:items-center">
                             <div className="bg-[#f8f8f8] dark:bg-background shadow outline-none w-full rounded-full px-4 py-2 flex justify-between">
@@ -49,7 +49,7 @@ const Newsletter = () => {
                                 <button
                                     onClick={subscribe_news}
                                     className={`${!session && 'opacity-50'} ${!is_user_subscribed_news && session && 'hover:scale-105 cursor-pointer'} cursor-default rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
-                                    {is_user_subscribed_news ? 'Subscribed 📩' : 'Subscribe 📨'}
+                                    {is_user_subscribed_news ? 'Downloaded ✔' : 'Download 💾'}
                                 </button>
                                 <span className="tooltip">Authorize Your Email First!</span>
                             </div>
@@ -68,4 +68,4 @@ const Newsletter = () => {
     )
 }
 
-export default Newsletter
+export default Download
