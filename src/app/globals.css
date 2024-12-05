@@ -35,6 +35,9 @@ body {
   opacity: 1;
 }
 
+.jarking_animation{
+  transition: 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+}
 
 html body[data-scroll-locked]{
   overflow-y: visible !important;

@@ -1,6 +1,6 @@
 'use client'
 import { MD_DATA } from "@/types/interfaces"
-import { get_books } from "@/actions/get-data"
+import { get_books } from "@/actions/actions"
 import { useEffect, useState } from "react"
 import BookCard from "@/components/BookCard"
 import { transformerCopyButton } from "@rehype-pretty/transformers"
@@ -23,7 +23,7 @@ const Book = () => {
     const { user_data } = useStore()
     const [load, setLoad] = useState(6)
     const [book_data_objects_array, setBook_data_objects_array] = useState<{ data: MD_DATA, content: string }[]>([])
-    const { data: session, status } = useSession()
+    const { status } = useSession()
 
     useEffect(() => {
         if (status === 'unauthenticated') {
@@ -31,7 +31,7 @@ const Book = () => {
         } else if (status === 'authenticated' && user_data?.subscribed == false) {
             router.push('/membership')
         }
-    }, [status, user_data?.subscribed])
+    }, [router, status, user_data?.subscribed])
 
     useEffect(() => {
         const temp = async () => {

@@ -36,6 +36,7 @@ export interface USER_GOOGLE_DATA {
 }
 
 export interface BOOK_DB_DATA {
+    stared_user: string[];
     data: MD_DATA & { star: number };
     content: string
 }

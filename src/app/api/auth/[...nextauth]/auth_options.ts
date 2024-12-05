@@ -27,7 +27,7 @@ export const auth_options = {
             image: user.image,
             subscribed: false,
             createdAt: new Date(),
-          }) as USER_GOOGLE_DATA;
+          });
 
           console.log("User inserted:", user.email);
         } else {

@@ -1,7 +1,7 @@
 'use client'
 import BlogCard from "@/components/BlogCard"
 import { MD_DATA } from "@/types/interfaces"
-import { get_blogs } from "@/actions/get-data"
+import { get_blogs } from "@/actions/actions"
 import { useEffect, useState } from "react"
 import Button from "@/components/Button"
 

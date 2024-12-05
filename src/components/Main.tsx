@@ -1,7 +1,7 @@
 import Link from "next/link"
 import BlogCard from "./BlogCard"
 import { MD_DATA, MD_DATA_OBJ } from "@/types/interfaces";
-import { get_blogs } from "@/actions/get-data";
+import { get_blogs } from "@/actions/actions";
 import Button from "./Button";
 
 const Main = async () => {
@@ -15,7 +15,7 @@ const Main = async () => {
             </div>
             <span className="text-xs md:text-base">DanielCodeForge <span className="font-bold md:text-xl text-blue-500">+=</span> DanielForgeChronicles</span>
             <p className="md:text-2xl px-20 md:px-40">
-                A Blog and Learning Resource Platform! Here, you’ll discover concise, to-the-point articles, news updates, human blog posts, practical tutorials, and much more.
+                A Blog and Learning Resource Platform! Here, you&apos;ll discover concise, to-the-point books, instant updates of latest content, human written blog posts, exclusive offers, and much more.
             </p>
 
             <div className="flex p-6 gap-6 flex-col items-center xl:w-[90vw] bg-[#f8f8f8] dark:bg-background">

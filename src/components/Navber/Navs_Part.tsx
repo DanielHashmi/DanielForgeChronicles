@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { RESOURCE_SM_CARD } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
-import { checkSubscription } from "@/actions/get-data";
+import { checkSubscription } from "@/actions/actions";
 import { useStore } from "@/context/context";
 
 const Navs_Part = () => {
@@ -26,49 +26,40 @@ const Navs_Part = () => {
         const check_subscription = async () => {
             if (session) {
                 const res = await checkSubscription(session.user.email);
-                if (!res) {
-                    set_user_data({ ...user_data, subscribed: false })
+                if (res) {
+                    // Only update state if the data has changed
+                    if (JSON.stringify(user_data) !== JSON.stringify(res)) {
+                        set_user_data(res);
+                    }
                 } else {
-                    set_user_data(res);
+                    if (user_data?.subscribed !== false) {
+                        set_user_data({
+                            ...user_data, 
+                            subscribed: false,
+                        });
+                    }
                 }
             }
         };
         check_subscription();
-
-    }, [session?.user && session.user.email])
+    }, [session, user_data, set_user_data]);
 
     const nav_btns = [
         'Newsletter',
         'Membership',
-        'Authenticate',
+        // 'Authenticate',
     ];
 
     const resources: RESOURCE_SM_CARD[] = [
-        // {
-        //     name: 'Tutorials',
-        //     detail: 'To the Point Tutorials',
-        //     locked: false,
-        // },
         {
             name: 'Blogs',
-            detail: 'Human Written Blogs',
+            detail: 'Human Written BlogPosts',
             locked: false,
             quality: "FREE",
         },
-        // {
-        //     name: 'Courses',
-        //     detail: 'Simplified & Advance Courses',
-        //     locked: true,
-        //     quality: "GOLDEN",
-        // },
-        // {
-        //     name: 'Notes',
-        //     detail: '100% Tested Notes ',
-        //     locked: false,
-        // },
         {
             name: 'Books',
-            detail: 'Most Advance Concise SImplified Books',
+            detail: 'Most Advance Concise Simplified Books',
             locked: user_data?.subscribed ? false : true,
             quality: "PREMIUM",
         },
@@ -81,7 +72,7 @@ const Navs_Part = () => {
             <div
                 onMouseOver={() => setShowResource(true)}
                 onMouseOut={() => setShowResource(false)}
-                className={`${showResource ? 'h-96 py-4' : 'h-0'} px-4 xl:w-[581px] sm:w-[545px] w-[90vw] right-0 top-[56px] rounded-xl transition-all duration-1000 dark:bg-[#292a2b] bg-[#f8f8f8] absolute shadow-[0px_7px_7px_0px_#00000017] backdrop-blur-md overflow-auto flex flex-wrap gap-4 content-start`}>
+                className={`${showResource ? 'h-96 py-4' : 'h-0'} px-4 xl:w-[581px] sm:w-[545px] w-[90vw] right-0 top-[56px] rounded-xl jarking_animation dark:bg-[#292a2b] bg-[#f8f8f8] absolute shadow-[0px_7px_7px_0px_#00000017] backdrop-blur-md overflow-auto flex flex-wrap gap-4 content-start`}>
                 {resources.map((obj, index) => (
                     <Link
                         href={!obj.locked ? `/${obj.name.toLowerCase().slice(0, -1)}` : ''}

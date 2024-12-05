@@ -3,17 +3,40 @@ import Image from "next/image"
 import Button from "./Button"
 import Link from "next/link"
 import { BOOK_DATA } from "@/types/interfaces"
-import { useState } from "react"
-import { sendStar } from "@/actions/get-data"
+import { useEffect, useState } from "react"
+import { checkStar, getStarCount, saveOrDeleteStar } from "@/actions/actions"
+import { useSession } from "next-auth/react"
 
 const BookCard = (props: { data: BOOK_DATA }) => {
     const [show, setShow] = useState(false)
+    const { data: session } = useSession();
+    const [alreadyStared, setAlreadyStared] = useState(false);
+    const [starCount, setStarCount] = useState(0);
     const data = props.data
-    const send_star = async () => {
-        await sendStar(props.data.slug, 1)
+
+    const save_star_delete_star = async () => {
+        setAlreadyStared(!alreadyStared);
+        await saveOrDeleteStar(session.user.email, props.data.slug)
     }
+
+    useEffect(() => {
+        const check_star = async () => {
+            const star_exists = await checkStar(session.user.email, props.data.slug);
+            setAlreadyStared(star_exists);
+        };
+        check_star();
+    }, [session.user.email, props.data.slug])
+
+    useEffect(() => {
+        const get_star_count = async () => {
+            const star_count = await getStarCount(session.user.email, props.data.slug);
+            setStarCount(star_count);
+        };
+        get_star_count();
+    }, [session.user.email, props.data.slug, alreadyStared])
+
     return (
-        <div className="bg-white dark:bg-[#292a2b] flex flex-col gap-4 smooth cursor-pointer sm:hover:scale-105 h-fit max-w-[35rem] text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
+        <div className="bg-white dark:bg-[#292a2b] flex flex-col gap-4 smooth sm_scale h-fit max-w-[35rem] text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
             <div className="flex items-start gap-6 flex-col sm:flex-row">
                 <Link href={`/`}>
                     <div className="size-52 relative" >
@@ -32,11 +55,18 @@ const BookCard = (props: { data: BOOK_DATA }) => {
                         <div>
                             <span className="flex gap-2 items-center">
                                 <span className="text-xl">✉</span>
-                                <span className="font-bold flex">
+                                <span className="font-bold flex items-center w-full justify-between">
                                     <span>
                                         <span>Published: </span>{data.date}
                                     </span>
-                                    <img onClick={send_star} src="/star.svg" alt="star-icon" className="w-5 ml-24 hover:scale-105 dark:invert" />
+
+
+                                    {
+                                        <div className="text-lg" onClick={save_star_delete_star}>
+                                            {alreadyStared ? <span className='bg-[#f8f8f8] cursor-pointer dark:bg-background h-9 shadow w-12 items-center justify-center flex gap-1 rounded '>⭐{starCount}</span>
+                                                : <span className="bg-[#f8f8f8] cursor-pointer h-9 dark:bg-background shadow rounded w-12 flex gap-1 items-center justify-center"><Image width={100} height={100} src="/star.svg" alt="star-icon" className='w-5 hover:scale-105 dark:invert' />{starCount}</span>}
+                                        </div>
+                                    }
                                 </span>
                             </span>
                         </div>
@@ -44,7 +74,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
                     <div className="flex gap-4 items-center">
                         <Button text='Preview' />
                         <Button text='Download' />
-                        <div className={`smooth ${show && 'font-bold'} text-xs`} onClick={() => setShow(!show)}>More</div>
+                        <div className={`smooth cursor-pointer ${show && 'font-bold'} text-xs`} onClick={() => setShow(!show)}>More</div>
                     </div>
                 </div>
             </div>
