@@ -37,7 +37,7 @@ const Download = () => {
                     <div className="flex flex-col gap-4">
                         <div className="text-xl font-semibold">Download & Install DFC Locally 💻</div>
 
-                        <p>Want to access the content offline locally, Don't worry you can download & install DFC (DanielForgeChronicles) in any of your device platform independently.</p>
+                        <p>Want to access the content offline locally, Don&apos;t worry you can download & install DFC (DanielForgeChronicles) in any of your device platform independently.</p>
 
                         <div className="flex gap-6 flex-col sm:flex-row items-start sm:items-center">
                             <div className="bg-[#f8f8f8] dark:bg-background shadow outline-none w-full rounded-full px-4 py-2 flex justify-between">
