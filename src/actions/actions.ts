@@ -13,12 +13,14 @@ import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
+import path from 'path'
+
 
 // Blogs
 export const get_blogs = async () => {
-    const blog_data_objects_array = fs.readdirSync('public/blogs').map((file_name: string) => {
-        if (fs.existsSync(`public/blogs/${file_name}`) && file_name.endsWith('.md')) {
-            const { data } = matter(fs.readFileSync(`public/blogs/${file_name}`))
+    const blog_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'blogs')).map((file_name: string) => {
+        if (fs.existsSync(path.join(process.cwd(), 'src', 'blogs', file_name)) && file_name.endsWith('.md')) {
+            const { data } = matter(fs.readFileSync(path.join(process.cwd(), 'src', 'blogs', file_name)))
             return { data }
         }
     }).sort((a, b) => Number(new Date((b as MD_DATA_OBJ).data.date)) - Number(new Date((a as MD_DATA_OBJ).data.date))) as MD_DATA_OBJ[];
@@ -29,14 +31,14 @@ export const get_blogs = async () => {
 
 // Blogs Count
 export const get_blogs_count = async () => {
-    const blog_data_objects_array = fs.readdirSync('public/blogs');
+    const blog_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'books'));
     return blog_data_objects_array.length;
 }
 
 
 // Books Count
 export const get_books_count = async () => {
-    const book_data_objects_array = fs.readdirSync('public/books');
+    const book_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'books'));
     return book_data_objects_array.length;
 }
 
@@ -44,9 +46,9 @@ export const get_books_count = async () => {
 
 // Books
 export const get_books = async () => {
-    const book_data_objects_array = fs.readdirSync('public/books').map((file_name: string) => {
-        if (fs.existsSync(`public/books/${file_name}`) && file_name.endsWith('.md')) {
-            const { data, content } = matter(fs.readFileSync(`public/books/${file_name}`))
+    const book_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'books')).map((file_name: string) => {
+        if (fs.existsSync(path.join(process.cwd(), 'src', 'books', file_name)) && file_name.endsWith('.md')) {
+            const { data, content } = matter(fs.readFileSync(path.join(process.cwd(), 'src', 'books', file_name)))
 
             return { data, content }
         }

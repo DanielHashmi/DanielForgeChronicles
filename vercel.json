@@ -1,8 +1,9 @@
 {
-    "build": {
-      "env": {
-        "NPM_FLAGS": "--legacy-peer-deps"
-      }
+  "redirects": [
+    {
+      "source": "/blogs/:slug",
+      "destination": "/public/blogs/:slug",
+      "permanent": true
     }
-  }
-  
+  ]
+}

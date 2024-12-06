@@ -19,9 +19,10 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import ComicNeue_Regular from "@/app/fonts/Font_Objects/ComicNeue_Regular"
 import Navigation from "@/components/Navigation"
+import path from 'path'
 
 const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) => {
-    const file_path = `public/blogs/${(await params).blogpost}.md`
+    const file_path = path.join(process.cwd(), 'src', 'blogs', `${(await params).blogpost}.md`)
     if (!fs.existsSync(file_path)) {
         notFound()
         return;
