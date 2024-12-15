@@ -18,14 +18,24 @@ import { transformerCopyButton } from '@rehype-pretty/transformers'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import ComicNeue_Regular from "@/app/fonts/Font_Objects/ComicNeue_Regular"
-import Navigation from "@/components/Navigation"
+import Navigation from "@/components/BlogComponents/Navigation"
 import path from 'path'
+
+export const revalidate = 3600; // Rebuild the page
+export async function generateStaticParams() {
+    const folder_path = path.join(process.cwd(), 'src', 'blogs')
+    const file_names_array = fs.readdirSync(folder_path, 'utf-8')
+    const file_names_no_ext = file_names_array.map((filename) => {
+        const blogpost = filename.replace(/\.md$/, ''); // Remove file extension
+        return { blogpost };
+    });
+    return file_names_no_ext; // [{ blogpost: 'filename' }, { blogpost: 'filename' }]
+}
 
 const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) => {
     const file_path = path.join(process.cwd(), 'src', 'blogs', `${(await params).blogpost}.md`)
     if (!fs.existsSync(file_path)) {
-        notFound()
-        return;
+        notFound();
     }
     const raw_data = fs.readFileSync(file_path, 'utf-8')
     const { data, content } = matter(raw_data);
@@ -74,7 +84,7 @@ const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) =
                     </div>
 
                     <p dangerouslySetInnerHTML={{ __html: html_file_content }} className={`${PatrickHand_Regular.className}
-                         prose-h1:text-3xl prose-h1:md:text-4xl dark:prose-invert prose md:prose-pre:w-[86vw] xl:prose-pre:w-[60vw] prose-p:w-[80vw] xl:prose-p:w-[57vw] tracking-wide text-xl mt-6 pl-2`}></p>
+                         prose-h1:text-3xl prose-h1:md:text-4xl dark:prose-invert prose md:prose-pre:w-[86vw] xl:prose-pre:w-[60vw] prose-p:w-[80vw] xl:prose-p:w-[57vw] tracking-wide text-xl mt-6 pl-2 prose-pre:select-text`}></p>
                 </div>
                 <Navigation html_file_content={html_file_content} />
                 <ToolBar />

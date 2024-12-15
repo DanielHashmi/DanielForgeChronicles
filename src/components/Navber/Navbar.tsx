@@ -1,4 +1,3 @@
-'use client'
 import Ext_Navbar from "./Ext_Navbar"
 import Navs_Part from "./Navs_Part"
 import Logo_Part from "./Logo_Part"

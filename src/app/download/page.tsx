@@ -8,7 +8,7 @@ const Download = () => {
     const { data: session } = useSession();
     const [is_user_subscribed_news, set_is_user_subscribed_news] = useState(false);
 
-    const subscribe_news = async () => {
+    const download_DFC = async () => {
         if (session) {
             const user = await subscribeNews(session?.user.email);
             if (user) {
@@ -32,7 +32,7 @@ const Download = () => {
             <div className="flex p-6 gap-6 flex-col items-center">
                 <div className="text-4xl">Access Offline</div>
 
-                {/* News Send Card */}
+                {/* Download Offline Card */}
                 <div className="bg-white dark:bg-[#292a2b] flex flex-col gap-4 smooth 5 h-fit max-w-[35rem] text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
                     <div className="flex flex-col gap-4">
                         <div className="text-xl font-semibold">Download & Install DFC Locally 💻</div>
@@ -47,7 +47,7 @@ const Download = () => {
 
                             <div className={`${!session && 'hover-container'}`}>
                                 <button
-                                    onClick={subscribe_news}
+                                    onClick={download_DFC}
                                     className={`${!session && 'opacity-50'} ${!is_user_subscribed_news && session && 'hover:scale-105 cursor-pointer'} cursor-default rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
                                     {is_user_subscribed_news ? 'Downloaded ✔' : 'Download 💾'}
                                 </button>
@@ -58,12 +58,7 @@ const Download = () => {
                     </div>
                 </div>
 
-
-
             </div>
-
-
-
         </div >
     )
 }

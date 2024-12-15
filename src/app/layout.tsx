@@ -5,6 +5,7 @@ import Navbar from "@/components/Navber/Navbar";
 import ComicNeue_Regular from "./fonts/Font_Objects/ComicNeue_Regular";
 import { ThemeProvider } from "@/components/DarkMode/ThemeProvider";
 import SessionWrapper from "./api/auth/[...nextauth]/SessionWrapper";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "DanielForgeChronicles",
@@ -17,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-pt-40 scroll-smooth">
+    <html lang="en" className="scroll-pt-40 scroll-smooth select-none">
       <body
         className={`${ComicNeue_Regular.className} antialiased overflow-x-hidden grid`}
       >
@@ -31,6 +32,7 @@ export default function RootLayout({
             <BigProMan>
               <Navbar />
               {children}
+              <Footer />
             </BigProMan>
           </ThemeProvider>
         </SessionWrapper>

@@ -1,9 +1,7 @@
 'use server'
 import clientPromise from '@/mongodb/connect';
-import { BOOK_DB_DATA, MD_DATA_OBJ } from '@/types/interfaces';
+import { BOOK_DB_DATA } from '@/types/interfaces';
 import { transformerCopyButton } from '@rehype-pretty/transformers';
-import fs from 'fs'
-import matter from 'gray-matter';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeDocument from 'rehype-document';
 import rehypeFormat from 'rehype-format';
@@ -13,68 +11,68 @@ import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
+import matter from 'gray-matter';
 import path from 'path'
+import fs from 'fs'
 
+// Convert Markdown to HTML Function
+const convertMdToHtml = async (filePath: string) => {
+    const convertedData = fs.readdirSync(path.join(process.cwd(), filePath)).map((file_name: string) => {
+        if (fs.existsSync(path.join(process.cwd(), filePath, file_name)) && file_name.endsWith('.md')) {
+            const { data, content } = matter(fs.readFileSync(path.join(process.cwd(), filePath, file_name)))
+            return { data, content }
+        }
+    }).sort((a, b) => Number(new Date(b.data.date)) - Number(new Date(a.data.date)));
+    return convertedData;
+}
 
 // Blogs
-export const get_blogs = async () => {
-    const blog_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'blogs')).map((file_name: string) => {
-        if (fs.existsSync(path.join(process.cwd(), 'src', 'blogs', file_name)) && file_name.endsWith('.md')) {
-            const { data } = matter(fs.readFileSync(path.join(process.cwd(), 'src', 'blogs', file_name)))
-            return { data }
-        }
-    }).sort((a, b) => Number(new Date((b as MD_DATA_OBJ).data.date)) - Number(new Date((a as MD_DATA_OBJ).data.date))) as MD_DATA_OBJ[];
-
-    return blog_data_objects_array;
+export const get_blogs = async (limit: number) => {
+    const blog_data_objects_array = await convertMdToHtml('src/blogs');
+    return blog_data_objects_array.slice(0, limit);
 }
 
 
 // Blogs Count
 export const get_blogs_count = async () => {
-    const blog_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'books'));
-    return blog_data_objects_array.length;
+    const blog_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'blogs'));
+    return blog_data_objects_array.length || 0;
 }
+
 
 
 // Books Count
 export const get_books_count = async () => {
     const book_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'books'));
-    return book_data_objects_array.length;
+    return book_data_objects_array.length || 0;
 }
 
 
-
 // Books
-export const get_books = async () => {
-    const book_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'books')).map((file_name: string) => {
-        if (fs.existsSync(path.join(process.cwd(), 'src', 'books', file_name)) && file_name.endsWith('.md')) {
-            const { data, content } = matter(fs.readFileSync(path.join(process.cwd(), 'src', 'books', file_name)))
-
-            return { data, content }
-        }
-    }).sort((a, b) => Number(new Date((b as BOOK_DB_DATA).data.date)) - Number(new Date((a as BOOK_DB_DATA).data.date))) as BOOK_DB_DATA[];
+export const get_books = async (limit: number) => {
+    const book_data_objects_array = await convertMdToHtml('src/books') as BOOK_DB_DATA[];
 
     // save data in the DB
     const client = await clientPromise;
     const db = client.db("danielforgechroniclesDB");
-    let allCurrentBooksInDB: BOOK_DB_DATA[] = (await db.collection("books").find().toArray() as unknown) as BOOK_DB_DATA[]; // db current data
-    allCurrentBooksInDB = allCurrentBooksInDB.filter((dbBook) => book_data_objects_array.some((book) => book.data.slug === dbBook.data.slug))
+    let filteredDBObjectsArray = (await db.collection("books").find().toArray() as unknown) as BOOK_DB_DATA[]; // db current data
+    filteredDBObjectsArray = filteredDBObjectsArray.filter((dbBook) => book_data_objects_array.some((book) => book.data.slug === dbBook.data.slug))
 
     book_data_objects_array.forEach((dir_obj) => {
-        if (!allCurrentBooksInDB.some((db_book) => db_book.data.slug === dir_obj.data.slug)) {
-            allCurrentBooksInDB.push(dir_obj)
+        if (!filteredDBObjectsArray.some((db_book) => db_book.data.slug === dir_obj.data.slug)) {
+            filteredDBObjectsArray.push(dir_obj)
         }
     })
 
-    // await db.collection('books').deleteMany({}); Caution! this will dynamically delete books from db as you delete data from the directory
-    allCurrentBooksInDB.forEach(async (data) => {
+    // await db.collection('books').deleteMany({}); // Caution! this will dynamically delete books from db as you delete data from the directory
+    filteredDBObjectsArray.forEach(async (data) => {
         const existingBook = await db.collection("books").findOne({ "data.slug": data.data.slug });
         if (!existingBook) {
             await db.collection("books").insertOne(data);
         }
     })
 
-    book_data_objects_array.map(async (obj) => {
+    const processedData = await Promise.all(book_data_objects_array.map(async (obj) => {
         obj.content = (await unified()
             .use(remarkParse)
             .use(remarkRehype)
@@ -93,9 +91,11 @@ export const get_books = async () => {
                 ],
             })
             .process(obj?.content)).toString();
-    })
+        return obj;
 
-    return book_data_objects_array;
+    }))
+
+    return processedData.slice(0, limit);
 }
 
 
@@ -110,9 +110,7 @@ export const sendSubscription = async (email: string, subscribe: boolean) => {
     } else {
         return undefined;
     }
-
 }
-
 
 
 // Check Subscription
@@ -121,7 +119,7 @@ export const checkSubscription = async (email: string) => {
     const db = client.db("danielforgechroniclesDB");
 
     const existingUser = await db.collection("user_data_by_google").findOne({ email: email });
-    if (existingUser.subscribed) {
+    if (existingUser?.subscribed) {
         return JSON.parse(JSON.stringify(existingUser));
     } else {
         return false;
@@ -129,58 +127,47 @@ export const checkSubscription = async (email: string) => {
 
 }
 
-
-// Add or Delete Star For Book
-
-export const saveOrDeleteStar = async (email: string, slug: string) => {
+// Save array in database
+export const saveArrayInDB = async (email: string, slug: string, arrayName: string) => { // Work Here!
     const client = await clientPromise;
     const db = client.db("danielforgechroniclesDB");
 
     const existingBook = await db.collection("books").findOne({ "data.slug": slug });
 
     if (existingBook) {
-        existingBook.stared_users = existingBook.stared_users || [];
-        if (!existingBook.stared_users.includes(email)) {
-            existingBook.stared_users = [...existingBook.stared_users, email];
-            await db.collection("books").updateOne({ "data.slug": slug }, { $set: { stared_users: existingBook.stared_users } });
+        existingBook[arrayName] = existingBook[arrayName] || [];
+        if (!existingBook[arrayName].includes(email)) {
+            existingBook[arrayName] = [...existingBook[arrayName], email];
+            await db.collection("books").updateOne({ "data.slug": slug }, { $set: { [arrayName]: existingBook[arrayName] } });
         } else {
-            existingBook.stared_users = existingBook.stared_users.filter((existingEmail: string) => existingEmail !== email);
-            await db.collection("books").updateOne({ "data.slug": slug }, { $set: { stared_users: existingBook.stared_users } });
+            if (['stared_users'].includes(arrayName)) { // this will kinda toggle the user in db
+                existingBook[arrayName] = existingBook[arrayName].filter((existingEmail: string) => existingEmail !== email);
+                await db.collection("books").updateOne({ "data.slug": slug }, { $set: { [arrayName]: existingBook[arrayName] } });
+            }
         }
+        return true;
     } else {
         return false;
     }
 }
 
-
-
-
-// Check Star Exists
-export const checkStar = async (email: string, slug: string) => {
-    const client = await clientPromise;
-    const db = client.db("danielforgechroniclesDB");
-
-    const existingBook = await db.collection("books").findOne({ "data.slug": slug });
-
-    if (existingBook.stared_users && existingBook.stared_users.includes(email)) {
-        return true
-    }
-    return false;
+// Add or Delete Star For Book
+export const saveOrDeleteStar = async (email: string, slug: string) => {
+    return await saveArrayInDB(email, slug, 'stared_users');
 }
 
 
-// Check Star Count
-export const getStarCount = async (email: string, slug: string) => {
+// Get All Users Who Has Given Star to the Book
+export const getStaredUsers = async (slug: string) => {
     const client = await clientPromise;
     const db = client.db("danielforgechroniclesDB");
 
     const book_data = await db.collection("books").findOne({ "data.slug": slug });
     if (book_data?.stared_users) {
-        return book_data?.stared_users.length;
+        return book_data.stared_users;
     }
-    return 0;
+    return [];
 }
-
 
 
 // Subscribe News
@@ -192,19 +179,57 @@ export const subscribeNews = async (email: string) => {
 
     if (!existingUser) {
         await db.collection("news_subscribed_users").insertOne({ email });
+        await sendEmail(email, 'You Have Subscribed to the Newsletter!', '', 'newsletter');
         return true;
     }
 }
+
 // Check Subscribe News
 export const checkSubscribeNews = async (email: string) => {
     const client = await clientPromise;
     const db = client.db("danielforgechroniclesDB");
-
     const existingUser = await db.collection("news_subscribed_users").findOne({ email });
+    return existingUser ? true : false;
+}
 
-    if (existingUser) {
-        return true;
-    } else {
+// Get Claimed Users
+export const getClaimedUsers = async (slug: string) => {
+    const client = await clientPromise;
+    const db = client.db("danielforgechroniclesDB");
+
+    const book_data = await db.collection("books").findOne({ "data.slug": slug });
+    if (book_data?.claimed_users) {
+        return book_data.claimed_users;
+    }
+    return [];
+}
+
+// Send Email // how sendEmail Function is working above, even though it is defined here at the bottom still iam able to access it above how?
+export const sendEmail = async (email: string, subject: string, html: string, type: 'newsletter' | 'book_claim', book_slug?: string, attachment?: { filename: string; path: string }) => {
+    try {
+        const response = await fetch(process.env.BASE_URL + "/api/email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                to: email,
+                subject,
+                html,
+                attachment,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            type === 'book_claim' && console.log(await saveArrayInDB(email, book_slug, 'claimed_users') ? 'Claimed User Has Been Saved In DB' : 'Error! Saving Claimed User To DB');
+            console.log("Email sent successfully!"); // Work Here!
+            return true;
+        } else {
+            console.error("Failed to send email! --> " + data.error);
+            return false;
+        }
+    } catch (error) {
+        console.log("An error occurred. --> " + error);
         return false;
     }
 }

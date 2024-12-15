@@ -1,71 +1,25 @@
-'use client'
 import { MD_DATA } from "@/types/interfaces"
-import { get_books } from "@/actions/actions"
-import { useEffect, useState } from "react"
-import BookCard from "@/components/BookCard"
-import Button from "@/components/Button"
-import { useStore } from "@/context/context"
-import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
+import { checkSubscription, get_books } from "@/actions/actions"
+import { AuthOptions, getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
+import ClientBook from "@/components/BookComponents/ClientBook"
+import { auth_options } from "../api/auth/[...nextauth]/auth_options"
 
-const Book = () => {
-    const router = useRouter()
-    const { user_data } = useStore()
-    const [load, setLoad] = useState(6)
-    const [book_data_objects_array, setBook_data_objects_array] = useState<{ data: MD_DATA, content: string }[]>([])
-    const { status } = useSession()
+const Book = async () => {
+    const session = await getServerSession(auth_options as unknown as AuthOptions);
+    const status = session ? 'authenticated' : 'unauthenticated';
+    const isUserSubscribed = await checkSubscription(session?.user.email);
     
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            router.push('/membership')
-        } else if (status === 'authenticated' && user_data?.subscribed == false) {
-            router.push('/membership')
-        }
-    }, [router, status, user_data?.subscribed])
+    if (status === 'unauthenticated') {
+        redirect('/membership');
+    }
+    else if (status === 'authenticated' && !isUserSubscribed) {
+        redirect('/membership');
+    }
 
-    useEffect(() => {
-        const temp = async () => {
-            const data: { data: MD_DATA, content: string }[] = (await get_books()).slice(0, load) // why im calling all data and then slicing it, this looks inefficient!
-            setBook_data_objects_array(data);
-        }
-        temp()
-    }, [load])
+    const book_data_objects_array: { data: MD_DATA, content: string }[] = await get_books(6) as unknown as { data: MD_DATA, content: string }[];
 
-    return (
-        <div className="pt-[200px] text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
-            <div className="flex p-6 gap-6 flex-col items-center">
-                <div className="text-4xl">Books</div>
-
-                <div className="flex gap-6 justify-center flex-wrap">
-
-                    {
-                        book_data_objects_array.length === 0 || !user_data?.subscribed ? [1, 2, 3].map((key) => (
-                            <div key={key} className="bg-white dark:bg-[#292a2b] animate-pulse min-h-[240px] w-[384px] rounded-xl shadow-[0_0_7px_6px_#02020208]"></div>
-                        )) : user_data?.subscribed && book_data_objects_array.map((obj: { data: MD_DATA; content: string }, index: number) => (
-                            <div key={index}>
-                                <BookCard data={{ ...obj.data, content: obj.content }} />
-                            </div>
-                        ))
-                    }
-
-
-                </div>
-
-            </div>
-
-            {
-                user_data?.subscribed && <div className="mb-6">
-                    {
-                        load > book_data_objects_array.length + 3 && book_data_objects_array.length != 0 ? "That's It! 🤷‍♂️" : <div onClick={() => setLoad(load + 3)} >
-                            <Button text='Load More' />
-                        </div>
-                    }
-                </div>
-            }
-
-
-        </div>
-    )
+    return <ClientBook book_data_objects_array={book_data_objects_array} />
 }
 
 export default Book

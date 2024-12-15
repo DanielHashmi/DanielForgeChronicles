@@ -10,9 +10,9 @@ const Newsletter = () => {
 
     const subscribe_news = async () => {
         if (session) {
-            const user = await subscribeNews(session?.user.email);
-            if (user) {
-                set_is_user_subscribed_news(user)
+            const subscribed = await subscribeNews(session?.user.email);
+            if (subscribed) {
+                set_is_user_subscribed_news(subscribed);
             }
         }
     }
@@ -20,8 +20,8 @@ const Newsletter = () => {
     useEffect(() => {
         if (session) {
             const check_subscribe_news = async () => {
-                const user = await checkSubscribeNews(session?.user.email);
-                set_is_user_subscribed_news(user);
+                const subscribed = await checkSubscribeNews(session?.user.email);
+                set_is_user_subscribed_news(subscribed);
             };
             check_subscribe_news();
         }
@@ -37,7 +37,7 @@ const Newsletter = () => {
                     <div className="flex flex-col gap-4">
                         <div className="text-xl font-semibold">Subscribe to the Newsletter 📰</div>
 
-                        <p>Get latest updates before others, By subscribing you will be informed when new content is available on DanielForgeChronicles.</p>
+                        <p>Get latest updates, By subscribing you will be emailed when new content is available on DanielForgeChronicles, Don't Miss Them!</p>
 
                         <div className="flex gap-6 flex-col sm:flex-row items-start sm:items-center">
                             <div className="bg-[#f8f8f8] dark:bg-background shadow outline-none w-full rounded-full px-4 py-2 flex justify-between">

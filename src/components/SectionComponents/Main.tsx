@@ -1,11 +1,11 @@
 import Link from "next/link"
-import BlogCard from "./BlogCard"
-import { MD_DATA, MD_DATA_OBJ } from "@/types/interfaces";
+import BlogCard from "../BlogComponents/BlogCard"
+import { MD_DATA } from "@/types/interfaces";
 import { get_blogs } from "@/actions/actions";
-import Button from "./Button";
+import Button from "../OverallComponents/Button";
 
 const Main = async () => {
-    const blog_data_objects_array: MD_DATA_OBJ[] = (await get_blogs()).slice(0, 3);
+    const blog_data_objects_array = await get_blogs(3) as unknown as { data: MD_DATA }[];
 
     return (
         <div className="pt-[200px] text-center items-center flex flex-col gap-6 ">
@@ -13,7 +13,7 @@ const Main = async () => {
                 <span className="text-4xl sm:text-5xl md:text-7xl font-bold">Welcome to</span>
                 <span className="text-4xl sm:text-5xl md:text-7xl font-bold opacity-50 underline">DanielForgeChronicles</span>
             </div>
-            <span className="text-xs md:text-base">DanielCodeForge <span className="font-bold md:text-xl text-blue-500">+=</span> DanielForgeChronicles</span>
+            <span className="text-xs md:text-base text-nowrap">DanielCodeForge <span className="font-bold md:text-xl text-blue-500">+=</span> DanielForgeChronicles</span>
             <p className="md:text-2xl px-20 md:px-40">
                 A Blog and Learning Resource Platform! Here, you&apos;ll discover concise, to-the-point books, instant updates of latest content, human written blog posts, exclusive offers, and much more.
             </p>

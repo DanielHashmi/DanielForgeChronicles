@@ -1,3 +1,4 @@
+// interfaces
 export interface MD_DATA {
     title: string;
     author: string;
@@ -10,7 +11,7 @@ export interface BOOK_DATA extends MD_DATA {
     content: string;
 }
 
-export interface Heading {
+export interface HEADING {
     type: 'h1' | 'h2';
     text: string;
     id: string;
@@ -36,7 +37,10 @@ export interface USER_GOOGLE_DATA {
 }
 
 export interface BOOK_DB_DATA {
-    stared_users: string[];
+    stared_users: string[] | undefined;
     data: MD_DATA & { star: number };
     content: string
 }
+
+// Types
+export type Convert_Md_To_Html = BOOK_DB_DATA | { data: MD_DATA }

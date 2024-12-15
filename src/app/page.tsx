@@ -1,18 +1,20 @@
-import Demo from "@/components/Demo";
-import Main from "@/components/Main";
+
+import Demo from "@/components/SectionComponents/Demo";
+import DemoResources from "@/components/SectionComponents/DemoResources";
+import Main from "@/components/SectionComponents/Main";
 
 export default function Home() {
 
   return (
     <main>
       <Main />
-      <div className="overflow-hidden">
+      <div className="">
         <Demo />
       </div>
-      {/* <div className="overflow-hidden">
-
+      <div className="overflow-hidden">
         <DemoResources />
-      </div> */}
+      </div>
+    
     </main>
   );
 }

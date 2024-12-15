@@ -38,6 +38,5 @@ export const auth_options = {
       };
       return true; // Allow sign-in
     },
-
   },
 };

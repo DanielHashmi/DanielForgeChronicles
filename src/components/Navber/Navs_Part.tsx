@@ -14,6 +14,7 @@ import { RESOURCE_SM_CARD } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
 import { checkSubscription } from "@/actions/actions";
 import { useStore } from "@/context/context";
+import { usePathname } from "next/navigation";
 
 const Navs_Part = () => {
     const { theme, setTheme } = useTheme()
@@ -21,6 +22,7 @@ const Navs_Part = () => {
     const [sheet_open, setSheet_open] = useState(false);
     const { data: session } = useSession();
     const { user_data, set_user_data } = useStore();
+    const pathName = usePathname();
 
     useEffect(() => {
         const check_subscription = async () => {
@@ -79,8 +81,9 @@ const Navs_Part = () => {
                         key={index}
                         className={`${showResource && !obj.locked ? 'opacity-100 cursor-pointer hover:shadow' : showResource && obj.locked ? 'opacity-50 cursor-default' : 'opacity-0'} 
                         transition-opacity duration-1000 bg-background p-4 rounded-md min-h-[84px] xl:w-[165px] sm:w-[160px] w-[150px] text-sm  dark:shadow-gray-600`} >
-
-                        <div>{obj.name} {obj.locked ? <span className="hover-container">🔒<span className="tooltip">Subscribe to Unlock! 🔑</span></span> : ''}</div>
+                        <span className="tooltip">Subscribe to Unlock! 🔑</span>
+                        {/* <div>{obj.name} {obj.locked ? <span className="hover-container">🔒<span className="tooltip">Subscribe to Unlock! 🔑</span></span> : ''}</div> */}
+                        <div>{obj.name} {obj.locked && '🔒'}</div>
                         <p className="text-xs font-thin opacity-70">{obj.detail}</p>
                     </Link>
                 ))}
@@ -92,15 +95,20 @@ const Navs_Part = () => {
                 <button
                     onMouseOver={() => setShowResource(true)}
                     onMouseOut={() => setShowResource(false)}
-                    className="hover:underline-offset-4 smooth hover:underline underline-offset-0 flex items-center gap-3"
-                >
+                    className={`hover:underline-offset-4 smooth hover:underline underline-offset-0 flex items-center gap-3
+                    ${['/book', '/blog'].includes(pathName) && 'underline underline-offset-4'}`}>
                     Resource
                     <Image className="dark:invert" src={showResource ? '/angle-up.svg' : '/angle-down.svg'} alt="angle-icon" width={12} height={12} />
                 </button>
 
                 {nav_btns.map((btn: string, index: number) => {
                     return (
-                        <Link className="hover:underline-offset-4 smooth hover:underline underline-offset-0" key={index} href={`/${btn.toLowerCase()}`}>{btn}</Link>
+                        <Link
+                            className={`hover:underline-offset-4 smooth hover:underline underline-offset-0 
+                            ${`/${btn.toLowerCase()}` === pathName && 'underline underline-offset-4'}`}
+                            key={index}
+                            href={`/${btn.toLowerCase()}`}>{btn}
+                        </Link>
                     )
                 })}
             </div>
