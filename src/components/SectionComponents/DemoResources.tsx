@@ -5,7 +5,7 @@ const DemoResources = async () => {
     const booksCount = await get_books_count()
 
     return (
-        <div className="flex flex-col lg:pt-12 pt-8 items-center sm:gap-20 gap-10 h-[35rem]">
+        <div className="flex flex-col lg:pt-24 pb-32 lg:pb-48 pt-8 items-center sm:gap-20 gap-10">
             <div className="flex flex-col sm:flex-row sm:gap-5 text-center">
                 <span className="text-4xl sm:text-3xl md:text-5xl font-bold">Current Available</span>
                 <span className="text-4xl sm:text-3xl md:text-5xl font-bold opacity-50 underline">Resources</span>

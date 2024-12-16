@@ -28,13 +28,13 @@ const BookCard = (props: { data: BOOK_DATA }) => {
         if (!claimed) {
             const fileUrl = 'https://drive.google.com/uc?export=download&id=1eS7jr5LKf15YW_w7obUtBEWSiQLzSqH_'; // this is insecure here! and this is static for only one book, but i don't want that i want it to be dynamic for each book because this bookcard is not only for one book
             const filename = 'Dunla Math Handbook First Edition (2024) Authored by Daniel Hashmi (DanielCodeForge).pdf'
-           
+
             setSendingEmail(true);
             const response = await sendEmail(
                 session?.user.email,
                 'Congratulations🥳 You Have Claimed the Premium Book📙 for Free🎁',
                 EmailHtmlTemplate,
-                'book_claim',
+                'book_claim', // this is the type of sending email
                 data.slug,
                 { filename, path: fileUrl },
             )
@@ -97,19 +97,19 @@ const BookCard = (props: { data: BOOK_DATA }) => {
                             </span>
                         </div>
                     </div>
-                    <div className="flex gap-4 items-center w-full sm:justify-between">
+                    <div className="flex gap-4 items-center w-full sm:justify-between relative">
                         <a href={'https://hashmiverse56.gumroad.com/l/vhymr'}>
                             <Button text='Buy It 💗' />
                         </a>
                         <div onClick={claim_book} className={`${claimed && 'opacity-50'}`}>
                             <Button text={sendingEmail ? 'Claiming...' : claimed ? 'Claimed' : 'Claim It'} />
                         </div>
-                        <div className={`smooth cursor-pointer ${show && 'font-bold'} text-xs`} onClick={() => setShow(!show)}>More</div>
+                        <div className={`smooth cursor-pointer absolute sm:relative right-0 ${show && 'font-bold'} text-xs`} onClick={() => setShow(!show)}>More</div>
                     </div>
                 </div>
             </div>
 
-            <div className={`${show ? 'h-56' : 'h-0 w-0'} smooth flex-col overflow-hidden`}>
+            <div className={`${show ? 'max-h-[50rem]' : 'max-h-0 w-fit'} jarking_animation flex-col overflow-hidden`}>
                 <p dangerouslySetInnerHTML={{ __html: data.content }} className="py-2 text-sm prose prose-h2:m-0 prose-h2:mb-4 dark:prose-invert"></p>
             </div>
         </div >

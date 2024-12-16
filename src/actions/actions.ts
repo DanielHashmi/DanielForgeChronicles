@@ -205,23 +205,24 @@ export const getClaimedUsers = async (slug: string) => {
 }
 
 // Send Email // how sendEmail Function is working above, even though it is defined here at the bottom still iam able to access it above how?
-export const sendEmail = async (email: string, subject: string, html: string, type: 'newsletter' | 'book_claim', book_slug?: string, attachment?: { filename: string; path: string }) => {
+export const sendEmail = async (to: string, subject: string, html: string, type: 'newsletter' | 'book_claim' | 'message', book_slug?: string, attachment?: { filename: string; path: string }, from?: string) => {
     try {
         const response = await fetch(process.env.BASE_URL + "/api/email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                to: email,
+                to,
                 subject,
                 html,
                 attachment,
+                from,
             }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            type === 'book_claim' && console.log(await saveArrayInDB(email, book_slug, 'claimed_users') ? 'Claimed User Has Been Saved In DB' : 'Error! Saving Claimed User To DB');
+            type === 'book_claim' && console.log(await saveArrayInDB(to, book_slug, 'claimed_users') ? 'Claimed User Has Been Saved In DB' : 'Error! Saving Claimed User To DB');
             console.log("Email sent successfully!"); // Work Here!
             return true;
         } else {
@@ -232,4 +233,10 @@ export const sendEmail = async (email: string, subject: string, html: string, ty
         console.log("An error occurred. --> " + error);
         return false;
     }
+}
+
+// Server action for the send email and message form
+export const handle_send = async (e: any) => { // Work Here
+    const sended = await sendEmail(process.env.COMPANY_EMAIL, 'You have received an email from <DanielForgeChronicles> User!', e.get('message'), 'message', '', { filename: '', path: '' }, e.get('email'));
+    return sended;
 }

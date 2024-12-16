@@ -133,7 +133,7 @@ const Navs_Part = () => {
                         </button>
                         {nav_btns.map((btn: string, index: number) => {
                             return (
-                                <Link className="hover:underline-offset-4 smooth hover:underline underline-offset-0" key={index} href={`/${btn.toLowerCase()}`}>{btn}</Link>
+                                <Link onClick={() => setSheet_open(false)} className="hover:underline-offset-4 smooth hover:underline underline-offset-0" key={index} href={`/${btn.toLowerCase()}`}>{btn}</Link>
                             )
                         })}
                     </SheetHeader>

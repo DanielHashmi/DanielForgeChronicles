@@ -3,8 +3,8 @@ import { google } from "googleapis";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-    const { to, subject, html, attachment } = await req.json();
-    
+    const { to, subject, html, attachment, from } = await req.json();
+
     // Fetch and process the attachment if it has a path
     if (attachment?.path) {
         try {
@@ -13,10 +13,10 @@ export async function POST(req: Request) {
             });
 
             if (!file_in_google.ok) throw new Error(`Failed to fetch file: ${file_in_google.statusText}`);
-            
+
             // Convert ArrayBuffer to Buffer
             const fileBuffer = Buffer.from(await file_in_google.arrayBuffer());
-            
+
             // Update attachment to use the Buffer
             attachment.content = fileBuffer;
             delete attachment.path;  // Remove the path property
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
 
         // Define mail options
         const mailOptions = {
-            from: `DanielForgeChronicles (By DanielCodeForge) -- <${process.env.COMPANY_EMAIL}>`,
+            from: from ? from : `DanielForgeChronicles (By DanielCodeForge) -- <${process.env.COMPANY_EMAIL}>`,
             to,
             subject,
             html,
