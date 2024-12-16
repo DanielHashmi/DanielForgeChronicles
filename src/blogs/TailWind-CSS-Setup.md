@@ -2,7 +2,7 @@
 title: How to setup Tailwind CSS
 author: Daniel Hashmi
 date: 11/30/2024
-slug: TailWind-CSS-Setup
+slug: Tailwind-CSS-Setup
 image: tailwind-css.png
 desc: This is TailwindCss setup, this will guide you how to setup tailwindcss in you project, very easily and well explained step by step tutorial.
 ---
