@@ -37,7 +37,7 @@ const Newsletter = () => {
                     <div className="flex flex-col gap-4">
                         <div className="text-xl font-semibold">Subscribe to the Newsletter 📰</div>
 
-                        <p>Get latest updates, By subscribing you will be emailed when new content is available on DanielForgeChronicles, Don't Miss Them!</p>
+                        <p>Get latest updates, By subscribing you will be emailed when new content is available on DanielForgeChronicles, Don&apos;t Miss Them!</p>
 
                         <div className="flex gap-6 flex-col sm:flex-row items-start sm:items-center">
                             <div className="bg-[#f8f8f8] dark:bg-background shadow outline-none w-full rounded-full px-4 py-2 flex justify-between">

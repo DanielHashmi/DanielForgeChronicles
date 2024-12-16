@@ -38,7 +38,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
                 data.slug,
                 { filename, path: fileUrl },
             )
-            response && setClaimed(true);
+            if (response) setClaimed(true);
             setSendingEmail(false);
         }
     }
@@ -57,7 +57,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
     useEffect(() => {
         const is_user_claimed = async () => {
             const claimed_users: string[] = await getClaimedUsers(props.data.slug);
-            session?.user.email && setClaimed(claimed_users.includes(session?.user.email));
+            if (session?.user.email) setClaimed(claimed_users.includes(session?.user.email));
             // setClaimedUsersCount(claimed_users.length); // if i like to demo the claimed user then maybe i will inshalla
         };
         is_user_claimed();

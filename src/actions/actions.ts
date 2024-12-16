@@ -222,7 +222,7 @@ export const sendEmail = async (to: string, subject: string, html: string, type:
         const data = await response.json();
 
         if (response.ok) {
-            type === 'book_claim' && console.log(await saveArrayInDB(to, book_slug, 'claimed_users') ? 'Claimed User Has Been Saved In DB' : 'Error! Saving Claimed User To DB');
+            if (type === 'book_claim') console.log(await saveArrayInDB(to, book_slug, 'claimed_users') ? 'Claimed User Has Been Saved In DB' : 'Error! Saving Claimed User To DB');
             console.log("Email sent successfully!"); // Work Here!
             return true;
         } else {
@@ -236,7 +236,7 @@ export const sendEmail = async (to: string, subject: string, html: string, type:
 }
 
 // Server action for the send email and message form
-export const handle_send = async (e: any) => { // Work Here
-    const sended = await sendEmail(process.env.COMPANY_EMAIL, 'You have received an email from <DanielForgeChronicles> User!', e.get('message'), 'message', '', { filename: '', path: '' }, e.get('email'));
+export const handle_send = async (e: FormData) => { // Work Here
+    const sended = await sendEmail(process.env.COMPANY_EMAIL, 'You have received an email from <DanielForgeChronicles> User!', e.get('message') as string | null, 'message', '', { filename: '', path: '' }, e.get('email') as string | null);
     return sended;
 }
