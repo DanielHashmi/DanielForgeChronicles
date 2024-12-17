@@ -3,7 +3,7 @@ import { checkSubscription, get_books } from "@/actions/actions"
 import { AuthOptions, getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import ClientBook from "@/components/BookComponents/ClientBook"
-import { auth_options } from "../api/auth/[...nextauth]/auth_options"
+import { auth_options } from "../../api/auth/[...nextauth]/auth_options"
 
 const Book = async () => {
     const session = await getServerSession(auth_options as unknown as AuthOptions);

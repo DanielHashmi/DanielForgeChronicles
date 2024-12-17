@@ -4,13 +4,13 @@ import Logo_Part from "./Logo_Part"
 
 const Navbar = () => {
     return (
-        <div className={`flex w-full justify-center backdrop-blur-xl pt-6 top-0 fixed flex-col z-50 items-center`}>
+        <div className={`flex w-full justify-center backdrop-blur-xl pt-6 top-[-85px] sticky flex-col z-50 items-center`}>
             <div className="w-[90vw] flex justify-between items-center">
                 <Logo_Part />
                 <Navs_Part />
-              
+
             </div>
-            
+
             <Ext_Navbar />
         </div>
     )

@@ -77,13 +77,12 @@ const Navs_Part = () => {
                 className={`${showResource ? 'h-96 py-4' : 'h-0'} px-4 xl:w-[581px] sm:w-[545px] w-[90vw] right-0 top-[56px] rounded-xl jarking_animation dark:bg-[#292a2b] bg-[#f8f8f8] absolute shadow-[0px_7px_7px_0px_#00000017] backdrop-blur-md overflow-auto flex flex-wrap gap-4 content-start`}>
                 {resources.map((obj, index) => (
                     <Link
-                        href={!obj.locked ? `/${obj.name.toLowerCase().slice(0, -1)}` : ''}
+                        href={!obj.locked ? `/resource/${obj.name.toLowerCase().slice(0, -1)}` : ''}
                         key={index}
                         className={`${showResource && !obj.locked ? 'opacity-100 cursor-pointer hover:shadow' : showResource && obj.locked ? 'opacity-50 cursor-default' : 'opacity-0'} 
                         transition-opacity duration-1000 bg-background p-4 rounded-md min-h-[84px] xl:w-[165px] sm:w-[160px] w-[150px] text-sm  dark:shadow-gray-600`} >
                         <span className="tooltip">Subscribe to Unlock! 🔑</span>
-                        {/* <div>{obj.name} {obj.locked ? <span className="hover-container">🔒<span className="tooltip">Subscribe to Unlock! 🔑</span></span> : ''}</div> */}
-                        <div>{obj.name} {obj.locked && '🔒'}</div>
+                        <div>{obj.name} {obj.locked ? <span className="hover-container">🔒<span className="tooltip">Subscribe to Unlock! 🔑</span></span> : ''}</div>
                         <p className="text-xs font-thin opacity-70">{obj.detail}</p>
                     </Link>
                 ))}
@@ -96,7 +95,7 @@ const Navs_Part = () => {
                     onMouseOver={() => setShowResource(true)}
                     onMouseOut={() => setShowResource(false)}
                     className={`hover:underline-offset-4 smooth hover:underline underline-offset-0 flex items-center gap-3
-                    ${['/book', '/blog'].includes(pathName) && 'underline underline-offset-4'}`}>
+                    ${pathName.startsWith('/resource/') && 'underline underline-offset-4'}`}>
                     Resource
                     <Image className="dark:invert" src={showResource ? '/angle-up.svg' : '/angle-down.svg'} alt="angle-icon" width={12} height={12} />
                 </button>

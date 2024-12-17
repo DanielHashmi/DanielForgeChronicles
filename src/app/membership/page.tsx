@@ -18,7 +18,7 @@ const Membership = () => {
   };
 
   return (
-    <div className="pt-[200px] text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
+    <div className="text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
       <div className="flex p-6 gap-6 flex-col items-center">
         <div className="text-4xl">Become Rare</div>
 

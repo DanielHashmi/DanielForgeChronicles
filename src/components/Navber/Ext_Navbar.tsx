@@ -32,7 +32,7 @@ const Ext_Navbar = () => {
                 dragConstraints={scrollRef.current ? { left: -width, right: 0 } : undefined}
                 className={`w-[50rem] sm:w-[70rem] md:w-[90vw] flex justify-around p-2 font-bold text-sm lg:text-base`}>
                 {buttons.map((button, index) => (
-                    <Link href={`/blog/${button}`} key={index}
+                    <Link href={`/resource/blog/${button}`} key={index}
                         className={`hover:underline cursor-pointer
                         ${pathName.endsWith(`/${button}`) && 'underline'}`}>
                         {button}

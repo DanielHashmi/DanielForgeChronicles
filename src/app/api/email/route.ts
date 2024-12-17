@@ -52,7 +52,7 @@ export async function POST(req: Request) {
 
         // Define mail options
         const mailOptions = {
-            from: from ? from : `DanielForgeChronicles (By DanielCodeForge) -- <${process.env.COMPANY_EMAIL}>`,
+            from: from ? `${from} via DanielForgeChronicles <${process.env.COMPANY_EMAIL}>` : `DanielForgeChronicles (By DanielCodeForge) -- <${process.env.COMPANY_EMAIL}>`,
             to,
             subject,
             html,
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
         };
 
         // Send the email
-        const result = await transporter.sendMail(mailOptions);
+        const result = await transporter.sendMail(mailOptions as any);
         return NextResponse.json({ message: "Email sent", result }, { status: 200 });
     } catch (error) {
         console.error("Error sending email:", error);

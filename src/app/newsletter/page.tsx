@@ -12,7 +12,7 @@ const Newsletter = () => {
         if (session) {
             const subscribed = await subscribeNews(session?.user.email);
             if (subscribed) {
-                set_is_user_subscribed_news(subscribed);
+                set_is_user_subscribed_news(!is_user_subscribed_news);
             }
         }
     }
@@ -28,7 +28,7 @@ const Newsletter = () => {
     }, [session])
 
     return (
-        <div className="pt-[200px] text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
+        <div className="text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
             <div className="flex p-6 gap-6 flex-col items-center">
                 <div className="text-4xl">Get Ahead</div>
 
@@ -48,8 +48,8 @@ const Newsletter = () => {
                             <div className={`${!session && 'hover-container'}`}>
                                 <button
                                     onClick={subscribe_news}
-                                    className={`${!session && 'opacity-50'} ${!is_user_subscribed_news && session && 'hover:scale-105 cursor-pointer'} cursor-default rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
-                                    {is_user_subscribed_news ? 'Subscribed 📩' : 'Subscribe 📨'}
+                                    className={`${!session && 'opacity-50'} ${'hover:scale-105 cursor-pointer'} cursor-default rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
+                                    {is_user_subscribed_news ? <span className="grayscale">Unsubscribe 🔔</span> : 'Subscribe 🔔'}
                                 </button>
                                 <span className="tooltip">Authorize Your Email First!</span>
                             </div>

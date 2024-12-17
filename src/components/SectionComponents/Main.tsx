@@ -8,7 +8,7 @@ const Main = async () => {
     const blog_data_objects_array = await get_blogs(3) as unknown as { data: MD_DATA }[];
 
     return (
-        <div className="pt-[200px] text-center items-center flex flex-col gap-6 ">
+        <div className="pt-[70px] text-center items-center flex flex-col gap-6 ">
             <div className="flex flex-col">
                 <span className="text-4xl sm:text-5xl md:text-7xl font-bold">Welcome to</span>
                 <span className="text-4xl sm:text-5xl md:text-7xl font-bold opacity-50 underline">DanielForgeChronicles</span>
@@ -27,7 +27,7 @@ const Main = async () => {
                         </div>
                     ))}
                 </div>
-                <Link href={'/blog'}>
+                <Link href={'/resource/blog'}>
                     <Button text="Show More" />
                 </Link>
             </div>

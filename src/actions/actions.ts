@@ -179,7 +179,11 @@ export const subscribeNews = async (email: string) => {
 
     if (!existingUser) {
         await db.collection("news_subscribed_users").insertOne({ email });
-        await sendEmail(email, 'You Have Subscribed to the Newsletter!', '', 'newsletter');
+        await sendEmail(email, 'You Have Subscribed to the Newsletter!', 'html here', 'newsletter');
+        return true;
+    } else if (existingUser) {
+        await db.collection("news_subscribed_users").deleteOne({ email });
+        await sendEmail(email, 'You Have Unsubscribed to the Newsletter!', 'html here', 'newsletter');
         return true;
     }
 }
@@ -237,6 +241,6 @@ export const sendEmail = async (to: string, subject: string, html: string, type:
 
 // Server action for the send email and message form
 export const handle_send = async (e: FormData) => { // Work Here
-    const sended = await sendEmail(process.env.COMPANY_EMAIL, 'You have received an email from <DanielForgeChronicles> User!', e.get('message') as string | null, 'message', '', { filename: '', path: '' }, e.get('email') as string | null);
+    const sended = await sendEmail(process.env.COMPANY_EMAIL, 'You have received an email from <DanielForgeChronicles> User!', e.get('message') as string | null, 'message', undefined, undefined, e.get('email') as string | null);
     return sended;
 }

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { BigProMan } from "@/context/context";
 import Navbar from "@/components/Navber/Navbar";
@@ -7,10 +7,50 @@ import { ThemeProvider } from "@/components/DarkMode/ThemeProvider";
 import SessionWrapper from "./api/auth/[...nextauth]/SessionWrapper";
 import Footer from "@/components/Footer";
 
+const APP_NAME = "DanielForgeChronicles";
+const APP_DEFAULT_TITLE = "DanielForgeChronicles";
+const APP_TITLE_TEMPLATE = "%s - DanielForgeChronicles";
+const APP_DESCRIPTION = "DanielForgeChronicles is a blog website which is a subsidiary of the official DanielCodeForge, DanielForgeChronicles has a wide range of content including code, snippets, tech information, learning resource etc... related content.";
+
 export const metadata: Metadata = {
-  title: "DanielForgeChronicles",
-  description: "DanielForgeChronicles is a blog website which is a sub-website of the official DanielCodeForge, DanielForgeChronicles has a wide range of content include code, snippets, tech information, learning resource etc... related content.",
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE,
+  },
+  description: APP_DESCRIPTION,
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: APP_DEFAULT_TITLE,
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
 };
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
+};
+
 
 export default function RootLayout({
   children,

@@ -60,7 +60,7 @@ const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) =
         .process(content)).toString();
 
     return (
-        <div className={`flex justify-center pt-[130px]`} >
+        <div className={`flex justify-center pt-6`} >
             <div className="w-[90vw] flex justify-between sm:p-6 p-2">
                 <div className="w-full xl:w-[70vw] flex flex-col gap-6">
                     <div>
@@ -84,7 +84,7 @@ const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) =
                     </div>
 
                     <p dangerouslySetInnerHTML={{ __html: html_file_content }} className={`${PatrickHand_Regular.className}
-                         prose-h1:text-3xl prose-h1:md:text-4xl dark:prose-invert prose md:prose-pre:w-[86vw] xl:prose-pre:w-[60vw] prose-p:w-[80vw] xl:prose-p:w-[57vw] tracking-wide text-xl mt-6 pl-2 prose-pre:select-text`}></p>
+                         prose-h1:text-3xl text-sm sm:text-base md:text-lg prose-h1:md:text-4xl dark:prose-invert prose md:prose-pre:w-[86vw] xl:prose-pre:w-[60vw] prose-p:w-[80vw] xl:prose-p:w-[57vw] tracking-wide mt-6 pl-2 prose-pre:select-text prose-code:relative`}></p>
                 </div>
                 <Navigation html_file_content={html_file_content} />
                 <ToolBar />
