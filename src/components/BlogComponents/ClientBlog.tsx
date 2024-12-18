@@ -5,8 +5,9 @@ import LoadMoreButton from "@/components/OverallComponents/LoadMoreButton"
 import { MD_DATA } from "@/types/interfaces"
 import { useEffect, useState } from "react"
 
+let limit = 6;
+
 const ClientBlog = ({ blog_data_objects_array }: { blog_data_objects_array: { data: MD_DATA }[] }) => {
-    const [limit, setLimit] = useState(6);
     const [initialBlogData, setInitialBlogData] = useState(blog_data_objects_array);
     const [search, setSearch] = useState('');
     const [blogs_for_searching, set_blogs_for_searching] = useState(blog_data_objects_array);
@@ -14,15 +15,15 @@ const ClientBlog = ({ blog_data_objects_array }: { blog_data_objects_array: { da
     const loadMoreFunc = async () => {
         const new_blog_data_objects_array = await get_blogs(limit + 3) as unknown as { data: MD_DATA }[];
         setInitialBlogData(new_blog_data_objects_array);
-        setLimit(limit + 3);
+        limit += 3
     }
 
     useEffect(() => {
         const searchedBlogs = blogs_for_searching.filter((blog) => {
             return (blog.data.title).toLowerCase().includes(search.toLowerCase())
         })
-        setInitialBlogData(search === '' ? blog_data_objects_array : searchedBlogs)
-    }, [search])
+        setInitialBlogData(search === '' ? blogs_for_searching.slice(0, limit) : searchedBlogs)
+    }, [search, blog_data_objects_array, blogs_for_searching])
 
 
     const startSearch = async () => {

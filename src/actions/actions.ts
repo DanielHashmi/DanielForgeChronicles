@@ -243,4 +243,5 @@ export const sendEmail = async (to: string, subject: string, html: string, type:
 export const handle_send = async (e: FormData) => { // Work Here
     const sended = await sendEmail(process.env.COMPANY_EMAIL, 'You have received an email from <DanielForgeChronicles> User!', e.get('message') as string | null, 'message', undefined, undefined, e.get('email') as string | null);
     return sended;
+
 }

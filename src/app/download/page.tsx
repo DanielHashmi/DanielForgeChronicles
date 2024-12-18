@@ -1,31 +1,49 @@
 'use client'
-import { checkSubscribeNews, subscribeNews } from "@/actions/actions";
+// import { checkSubscription } from "@/actions/actions";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+
+
+// let deferedPrompt;
+// window.addEventListener('beforeinstallprompt', (e) => {
+//     e.preventDefault()
+    // deferedPrompt = e;
+// })
 
 const Download = () => {
     const { data: session } = useSession();
-    const [is_user_subscribed_news, set_is_user_subscribed_news] = useState(false);
+    // const [subscribed, setSubscribed] = useState(false);
+    // const [PWA, setPWA] = useState(false); // PWA disabled by default
 
-    const download_DFC = async () => {
-        if (session) {
-            const user = await subscribeNews(session?.user.email);
-            if (user) {
-                set_is_user_subscribed_news(user)
-            }
-        }
-    }
+    // useEffect(() => {
+    //     const check_subscription = async () => {
+    //         const isUserSubscribed = await checkSubscription(session?.user.email);
+    //         setSubscribed(isUserSubscribed);
+    //     };
+    //     check_subscription();
+    // }, [])
 
-    useEffect(() => {
-        if (session) {
-            const check_subscribe_news = async () => {
-                const user = await checkSubscribeNews(session?.user.email);
-                set_is_user_subscribed_news(user);
-            };
-            check_subscribe_news();
-        }
-    }, [session])
+
+
+
+
+    // const download_DFC = async () => {
+    //     if (session && deferedPrompt) {
+    //         deferedPrompt.prompt()
+    //         deferedPrompt.userChoice.then((choiceResult) => {
+    //             if (choiceResult.outcome === 'accepted') {
+    //                 console.log('User Installed');
+    //             } else {
+    //                 console.log('User Closed');
+    //             }
+    //         })
+    //         deferedPrompt = null;
+    //     } else {
+    //         console.log('Install Prompt not available');
+
+    //     }
+    // }
 
     return (
         <div className="text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
@@ -47,9 +65,9 @@ const Download = () => {
 
                             <div className={`${!session && 'hover-container'}`}>
                                 <button
-                                    onClick={download_DFC}
-                                    className={`${!session && 'opacity-50'} ${!is_user_subscribed_news && session && 'hover:scale-105 cursor-pointer'} cursor-default rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
-                                    {is_user_subscribed_news ? 'Downloaded ✔' : 'Download 💾'}
+                                    // onClick={download_DFC}
+                                    className={`${!session && 'opacity-50'} hover:scale-105 cursor-pointer rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
+                                    {'Download 💾'}
                                 </button>
                                 <span className="tooltip">Authorize Your Email First!</span>
                             </div>

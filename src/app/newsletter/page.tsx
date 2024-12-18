@@ -7,11 +7,14 @@ import { useEffect, useState } from "react";
 const Newsletter = () => {
     const { data: session } = useSession();
     const [is_user_subscribed_news, set_is_user_subscribed_news] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const subscribe_news = async () => {
         if (session) {
+            setLoading(true);
             const subscribed = await subscribeNews(session?.user.email);
             if (subscribed) {
+                setLoading(false);
                 set_is_user_subscribed_news(!is_user_subscribed_news);
             }
         }
@@ -47,9 +50,11 @@ const Newsletter = () => {
 
                             <div className={`${!session && 'hover-container'}`}>
                                 <button
+                                    disabled={loading}
                                     onClick={subscribe_news}
                                     className={`${!session && 'opacity-50'} ${'hover:scale-105 cursor-pointer'} cursor-default rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
-                                    {is_user_subscribed_news ? <span className="grayscale">Unsubscribe 🔔</span> : 'Subscribe 🔔'}
+                                    {!loading && (is_user_subscribed_news ? <span className="grayscale">Unsubscribe 🔔</span> : 'Subscribe 🔔')}
+                                    {loading && (is_user_subscribed_news ? 'Unsubscribing...' : 'Subscribing...')}
                                 </button>
                                 <span className="tooltip">Authorize Your Email First!</span>
                             </div>

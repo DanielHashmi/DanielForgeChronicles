@@ -41,6 +41,17 @@ export interface BOOK_DB_DATA {
     data: MD_DATA & { star: number };
     content: string
 }
-
+export interface MAIL_OPTIONS {
+    attachments: {
+        filename: string;
+        content: string;
+    } [];
+    from: string;
+    to: string;
+    subject: string;
+    html: string;
+}
 // Types
 export type Convert_Md_To_Html = BOOK_DB_DATA | { data: MD_DATA }
+
+

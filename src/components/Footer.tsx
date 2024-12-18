@@ -4,18 +4,17 @@ import Logo_Part from "./Navber/Logo_Part"
 import Image from "next/image"
 import Button from "./OverallComponents/Button"
 import { handle_send } from "@/actions/actions"
-import { useRef, useState } from "react"
+import { useState } from "react"
 
 const Footer = () => {
     const [sent, setSent] = useState(false);
-    const sending = useRef(false);
+    const [sending, setSending] = useState(false)
 
     const handleSend = async (e: FormData) => {
-        if (!sending.current) {
-            sending.current = true;
-            const res = !sent ? await handle_send(e) : true;
-            sending.current = false;
+        if (!sending) {
+            const res = await handle_send(e);
             setSent(res)
+            setSending(false);
         }
     }
 
@@ -55,7 +54,7 @@ const Footer = () => {
                     </div>
 
 
-                    <form action={handleSend} className={`dark:bg-[#292a2b] bg-background w-[305px] flex flex-col items-center h-fit gap-3 rounded-lg text-sm p-6`}>
+                    <form action={handleSend} onSubmit={() => setSending(true)} className={`dark:bg-[#292a2b] bg-background w-[305px] flex flex-col items-center h-fit gap-3 rounded-lg text-sm p-6`}>
                         <div className="font-bold">Give a Feedback, Idea, or Say Hi!</div>
                         <div className="bg-[#f8f8f8] dark:bg-background rounded-full w-full">
                             <input disabled={sent} name="email" className="bg-transparent py-2 px-4 outline-none" placeholder="Email" type="email" minLength={13} required />
@@ -64,8 +63,8 @@ const Footer = () => {
                         <div className="bg-[#f8f8f8] dark:bg-background rounded-full w-full">
                             <input disabled={sent} name="message" className="bg-transparent py-2 px-4 outline-none" placeholder="Message" type="text" required />
                         </div>
-                        <button className={`${sent && 'opacity-50'}`}>
-                            <Button text={sent ? 'Received 💛' : 'Send'} />
+                        <button disabled={sent} className={`${sent && 'opacity-50'}`}>
+                            <Button text={sending ? 'Sending...' : sent ? 'Received 💛' : 'Send'} />
                         </button>
                     </form>
 
@@ -93,6 +92,8 @@ const Footer = () => {
                         <Image className="rounded-full" src={'/danielcodeforge.png'} alt="logo" width={25} height={25} />
                     </a>
                 </div>
+
+                <a href="#" className="place-self-end">👆🏼</a>
             </div>
         </div>
     )

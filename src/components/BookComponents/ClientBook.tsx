@@ -22,7 +22,6 @@ const ClientBook = ({ book_data_objects_array }: { book_data_objects_array: { da
                 <BookCards book_data_objects_array={initialBookData} />
                 <LoadMoreButton data={initialBookData} loadMoreFunc={loadMoreFunc} limit={limit} />
             </div>
-
         </div>
     )
 }

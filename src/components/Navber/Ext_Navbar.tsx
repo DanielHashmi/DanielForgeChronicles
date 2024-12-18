@@ -4,6 +4,14 @@ import { motion } from 'framer-motion';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+// const pwaManifest = document.querySelector('link[rel="manifest"][href="/manifest.json"]').removeAttribute('href');
+// const func = async () => {
+//     const a = await navigator.serviceWorker.getRegistration()
+//     a?.unregister()
+
+// }
+// func() // work here
+
 const Ext_Navbar = () => {
     const buttons = ['React-Tilt', 'Regex', 'Redux-ToolKit', 'AOS-Scroll', 'NextAuth', 'Redux', 'React', 'Tailwind-CSS-Setup',];
     const scrollRef = useRef<HTMLDivElement | null>(null);

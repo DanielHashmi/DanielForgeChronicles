@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
+import { MAIL_OPTIONS } from "@/types/interfaces";
 
 export async function POST(req: Request) {
     const { to, subject, html, attachment, from } = await req.json();
@@ -67,7 +68,7 @@ export async function POST(req: Request) {
         };
 
         // Send the email
-        const result = await transporter.sendMail(mailOptions as any);
+        const result = await transporter.sendMail(mailOptions as MAIL_OPTIONS);
         return NextResponse.json({ message: "Email sent", result }, { status: 200 });
     } catch (error) {
         console.error("Error sending email:", error);
