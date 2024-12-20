@@ -26,7 +26,7 @@ const ToolBar = () => {
             {tools.map((tool, index) => {
                 return (
                     <div onClick={handleClick} key={index} className={`${tool === '/align-right.svg' && 'block xl:hidden'} size-5 relative smooth hover:scale-110 active:scale-125 cursor-pointer`}>
-                        <Image src={tool} data-src={tool} className={`${theme === 'dark' && 'invert'}`} alt="toolbar-icon" fill />
+                        <Image src={tool} data-src={tool} className={`rotate-180 ${theme === 'dark' && 'invert'}`} alt="toolbar-icon" fill />
                     </div>
                 )
             })}

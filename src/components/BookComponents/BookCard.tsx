@@ -1,7 +1,6 @@
 // 'use client' // Not Important! because this is already being used inside a client component so it is already running on client side
 import Image from "next/image"
 import Button from "../OverallComponents/Button"
-import Link from "next/link"
 import { BOOK_DATA } from "@/types/interfaces"
 import { useEffect, useState } from "react"
 import { getClaimedUsers, getStaredUsers, saveOrDeleteStar, sendEmail } from "@/actions/actions"
@@ -58,7 +57,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
         const is_user_claimed = async () => {
             const claimed_users: string[] = await getClaimedUsers(props.data.slug);
             if (session?.user.email) setClaimed(claimed_users.includes(session?.user.email));
-            // setClaimedUsersCount(claimed_users.length); // if i like to demo the claimed user then maybe i will inshalla
+            // setClaimedUsersCount(claimed_users.length); // if i like to demo the claimed user then maybe i will inshalla // work here
         };
         is_user_claimed();
     }, [session?.user.email, props.data.slug])
@@ -66,17 +65,18 @@ const BookCard = (props: { data: BOOK_DATA }) => {
     return (
         <div className="bg-white dark:bg-[#292a2b] flex flex-col gap-4 smooth sm_scale text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
             <div className="flex items-center sm:items-start gap-6 flex-col sm:flex-row">
-                <Link href={`/`}>
+
+                <a href={'https://hashmiverse56.gumroad.com/l/vhymr'}>
                     <div className="size-52 relative" >
                         <Image className="object-cover rounded-md" src={data.image} alt="image" fill />
                     </div>
-                </Link>
+                </a>
                 <div className="flex flex-col gap-4 w-full">
                     <div className="flex flex-col gap-4 py-2 text-sm">
                         <div className="text-3xl font-semibold">{data.title}</div>
                         <div className="flex gap-2 items-center">
                             <span className="flex gap-2">
-                                <Image className="rounded-full" src={'/danielcodeforge.png'} alt="logo" width={20} height={20} />
+                                <Image className="rounded-full" src={'/Daniel Hashmi.jpg'} alt="logo" width={20} height={20} />
                                 <span className="font-bold">Author: </span>{data.author}</span>
                         </div>
 

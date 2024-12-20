@@ -47,7 +47,7 @@ const Footer = () => {
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <a className="hover:font-bold" href={'https://danielcodeforge.vercel.app'}>Company</a>
-                                    <a className="hover:font-bold" href={'https://docs.google.com/document/d/1CfhpKECKC9TiTpRSuqkovdhr2dHGnfQU2mC8ARP8PTY/edit?usp=drive_link'}>Privacy Policy</a>
+                                    <a className="hover:font-bold" target="_blank" href={'https://docs.google.com/document/d/1CfhpKECKC9TiTpRSuqkovdhr2dHGnfQU2mC8ARP8PTY/edit?usp=drive_link'}>Privacy Policy</a>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@ const Footer = () => {
 
 
                     <form action={handleSend} onSubmit={() => setSending(true)} className={`dark:bg-[#292a2b] bg-background w-[305px] flex flex-col items-center h-fit gap-3 rounded-lg text-sm p-6`}>
-                        <div className="font-bold">Give a Feedback, Idea, or Say Hi!</div>
+                        <div className="font-bold">Give Feedback, Report a Bug, or Say Hi!</div>
                         <div className="bg-[#f8f8f8] dark:bg-background rounded-full w-full">
                             <input disabled={sent} name="email" className="bg-transparent py-2 px-4 outline-none" placeholder="Email" type="email" minLength={13} required />
                         </div>
@@ -71,6 +71,7 @@ const Footer = () => {
                     <div className="dark:bg-[#292a2b] bg-background w-[305px] h-fit flex flex-col gap-2 rounded-lg text-sm p-6">
                         <div className="font-bold">Content</div>
                         <div className="">Blogs <span className="font-bold">{': FREE'}</span> 🎉</div>
+                        <div className="">DFC <span className="font-bold">{': FREE DOWNLOAD'}</span> 🎉</div>
                         <div className="">Books <span className="font-bold">{': SUBSCRIPTION REQUIRED'}</span> 🥉</div>
 
                     </div>
@@ -86,14 +87,16 @@ const Footer = () => {
 
                 </div>
 
-                <div className="bg-white dark:bg-[#292a2b] p-3 rounded-lg text-center flex justify-center gap-2 text-xs sm:text-sm md:text-base">
-                    ALL RIGHTS RESERVED COPYRIGHT © DANIELFORGECHRONICLES  ( DANIELCODEFORGE )
-                    <a href={'https://danielcodeforge.vercel.app'}>
-                        <Image className="rounded-full" src={'/danielcodeforge.png'} alt="logo" width={25} height={25} />
-                    </a>
+                <div className="bg-white dark:bg-[#292a2b] flex items-center">
+                    <a href="#" className="pl-4">👆</a>
+                    <div className="p-3 rounded-lg text-center w-full flex justify-center gap-2 text-xs sm:text-sm md:text-base">
+                        <span className="opacity-60">ALL RIGHTS RESERVED COPYRIGHT © DANIELFORGECHRONICLES  ( DANIELCODEFORGE )</span>
+                        <a href={'https://danielcodeforge.vercel.app'}>
+                            <Image className="rounded-full" src={'/danielcodeforge.png'} alt="logo" width={25} height={25} />
+                        </a>
+                    </div>
                 </div>
 
-                <a href="#" className="place-self-end">👆🏼</a>
             </div>
         </div>
     )

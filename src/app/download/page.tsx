@@ -1,49 +1,26 @@
 'use client'
-// import { checkSubscription } from "@/actions/actions";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-// import { useEffect, useState } from "react";
+import { useState } from "react";
 
+let deferedPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferedPrompt = e;
+})
 
-// let deferedPrompt;
-// window.addEventListener('beforeinstallprompt', (e) => {
-//     e.preventDefault()
-    // deferedPrompt = e;
-// })
+// Some of PWA code is inside Ext_Navbar because its a client component and being rendered on all pages.
 
 const Download = () => {
-    const { data: session } = useSession();
-    // const [subscribed, setSubscribed] = useState(false);
-    // const [PWA, setPWA] = useState(false); // PWA disabled by default
-
-    // useEffect(() => {
-    //     const check_subscription = async () => {
-    //         const isUserSubscribed = await checkSubscription(session?.user.email);
-    //         setSubscribed(isUserSubscribed);
-    //     };
-    //     check_subscription();
-    // }, [])
-
-
-
-
-
-    // const download_DFC = async () => {
-    //     if (session && deferedPrompt) {
-    //         deferedPrompt.prompt()
-    //         deferedPrompt.userChoice.then((choiceResult) => {
-    //             if (choiceResult.outcome === 'accepted') {
-    //                 console.log('User Installed');
-    //             } else {
-    //                 console.log('User Closed');
-    //             }
-    //         })
-    //         deferedPrompt = null;
-    //     } else {
-    //         console.log('Install Prompt not available');
-
-    //     }
-    // }
+    const [downloaded, setDownloaded] = useState(localStorage.getItem('downloaded') === 'true');
+    const download_DFC = async () => {
+        if (deferedPrompt) {
+            deferedPrompt.prompt()
+            const user = await deferedPrompt.userChoice;
+            if (user.outcome === 'accepted') {
+                localStorage.setItem('downloaded', 'true');
+                setDownloaded(true);
+            }
+        }
+    }
 
     return (
         <div className="text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
@@ -58,18 +35,13 @@ const Download = () => {
                         <p>Want to access the content offline locally, Don&apos;t worry you can download & install DFC (DanielForgeChronicles) in any of your device platform independently.</p>
 
                         <div className="flex gap-6 flex-col sm:flex-row items-start sm:items-center">
-                            <div className="bg-[#f8f8f8] dark:bg-background shadow outline-none w-full rounded-full px-4 py-2 flex justify-between">
-                                {session ? session.user.email : 'Authorize to Attach Email'}
-                                <Image src="/clip.svg" alt="clip-icon" width={100} height={100} className="size-5 opacity-30 dark:invert" />
-                            </div>
-
-                            <div className={`${!session && 'hover-container'}`}>
+                            <div className={`${'hover-container'}`}>
                                 <button
-                                    // onClick={download_DFC}
-                                    className={`${!session && 'opacity-50'} hover:scale-105 cursor-pointer rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
-                                    {'Download 💾'}
+                                    onClick={download_DFC}
+                                    className={`${downloaded ? 'opacity-50 cursor-default' : 'hover:scale-105'} rounded-full text-nowrap smooth px-6 p-2 bg-background dark:bg-[#292a2b] w-fit shadow-[0_0_7px_6px_#02020208]`}>
+                                    {downloaded ? 'Downloaded ✔' : 'Download 💾'}
                                 </button>
-                                <span className="tooltip">Authorize Your Email First!</span>
+                                {downloaded && <span className="tooltip">Already Downloaded & Installed (DFC)!</span>}
                             </div>
 
                         </div>

@@ -50,7 +50,7 @@ const Navigation = ({ html_file_content }: { html_file_content: string }) => {
     }, [headings]);
 
     const navigationClass = useMemo(() =>
-        `font-sans w-[18vw] h-[50vh] min-w-[15rem] max-w-[17rem] duration-500 transition-all flex bg-[#ffffffd4] xl:bg-[#0000000f] shadow-[0_0_5px_4px_#00000017] rounded-sm flex-col fixed top-40 z-40 backdrop-blur-3xl ${show_Navigator ? 'left-8 xl:left-[77%]' : 'left-[-17rem] xl:left-[77%]'}`
+        `font-sans w-[18vw] h-[50vh] min-w-[15rem] max-w-[17rem] duration-500 transition-all dark:bg-background flex bg-[#ffffffd4] xl:bg-[#0000000f] shadow-[0_0_5px_4px_#00000017] rounded-sm flex-col fixed top-40 z-40 backdrop-blur-3xl ${show_Navigator ? 'left-8 xl:left-[77%]' : 'left-[-17rem] xl:left-[77%]'}`
         , [show_Navigator]);
 
     return (
@@ -61,7 +61,7 @@ const Navigation = ({ html_file_content }: { html_file_content: string }) => {
                     <a
                         key={index}
                         href={`#${heading.id}`}
-                        className={`cursor-pointer smooth ${heading.type === 'h2' ? 'ml-4 opacity-50' : ''} ${activeLink === heading.id ? 'scale-105 opacity-[1_!important]' : ''}`}
+                        className={`cursor-pointer smooth ${heading.type === 'h2' ? 'ml-4 opacity-50' : ' opacity-80'} ${activeLink === heading.id ? 'scale-105 opacity-[1_!important]' : ''}`}
                         onClick={() => handleLinkClick(heading.id)}
                     >
                         {heading.text[0].toUpperCase() + heading.text.slice(1)}
