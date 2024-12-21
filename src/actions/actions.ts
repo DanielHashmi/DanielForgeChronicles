@@ -180,11 +180,11 @@ export const subscribeNews = async (email: string) => {
 
     if (!existingUser) {
         await db.collection("news_subscribed_users").insertOne({ email });
-        await sendEmail(email, 'You Have Subscribed to the Newsletter!', generateEmail(email.split('@')[0]), 'newsletter');
+        await sendEmail(email, 'You Have Subscribed to the Newsletter!', generateEmail(email.split('@')[0], 'book_claim'), 'newsletter');
         return true;
     } else if (existingUser) {
         await db.collection("news_subscribed_users").deleteOne({ email });
-        await sendEmail(email, 'You Have Unsubscribed to the Newsletter!', generateEmail(email.split('@')[0]), 'newsletter');
+        await sendEmail(email, 'You Have Unsubscribed to the Newsletter!', generateEmail(email.split('@')[0], 'newsletter'), 'newsletter');
         return true;
     }
 }

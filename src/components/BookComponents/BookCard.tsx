@@ -32,7 +32,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
             const response = await sendEmail(
                 session?.user.email,
                 'Congratulations 🥳 You Have Claimed the Premium Book 📙 for Free 🎁',
-                generateEmail(session?.user.email.split('@')[0]),
+                generateEmail(session?.user.email.split('@')[0], 'book_claim'),
                 'book_claim', // this is the type of sending email
                 data.slug,
                 { filename, path: fileUrl },
