@@ -35,7 +35,7 @@ export const BigProMan = ({ children }: { children: ReactNode }) => {
             setDownloaded(false);
         }
     }, [deferedPrompt])
-
+ 
     return (
         <contextHook.Provider value={{ downloaded, blog_data, setBlog_data, user_data, set_user_data, show_Navigator, setShow_Navigator } as PropType}>
             {children}
