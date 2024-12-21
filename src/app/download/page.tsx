@@ -2,7 +2,7 @@
 import { useStore } from "@/context/context";
 
 let deferedPrompt;
-window && window.addEventListener('beforeinstallprompt', (e) => {
+if (window) window.addEventListener('beforeinstallprompt', (e) => {
     deferedPrompt = e;
 })
 

@@ -19,13 +19,13 @@ export const BigProMan = ({ children }: { children: ReactNode }) => {
     const [show_Navigator, setShow_Navigator] = useState(false)
     const [blog_data, setBlog_data] = useState<{ data: MD_DATA; content: string }[]>()
     const [user_data, set_user_data] = useState<USER_GOOGLE_DATA>();
-    const [deferedPrompt, setDeferedPrompt] = useState();
+    const [deferedPrompt, setDeferedPrompt] = useState<Event>();
     const [downloaded, setDownloaded] = useState(localStorage.getItem('downloaded') === 'true');
 
-    window && window.addEventListener('beforeinstallprompt', (e) => {
-        setDeferedPrompt(e as any)
+    if (window) window.addEventListener('beforeinstallprompt', (e) => {
+        setDeferedPrompt(e)
     })
-    window && window.addEventListener('appinstalled', (e) => {
+    if (window) window.addEventListener('appinstalled', () => {
         localStorage.setItem('downloaded', 'true');
         setDownloaded(true);
     })
