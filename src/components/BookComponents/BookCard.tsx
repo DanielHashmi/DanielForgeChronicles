@@ -5,7 +5,7 @@ import { BOOK_DATA } from "@/types/interfaces"
 import { useEffect, useState } from "react"
 import { getClaimedUsers, getStaredUsers, saveOrDeleteStar, sendEmail } from "@/actions/actions"
 import { useSession } from "next-auth/react"
-import { EmailHtmlTemplate } from "@/helpers/files/variables"
+import { generateEmail } from "@/helpers/files/functions"
 
 const BookCard = (props: { data: BOOK_DATA }) => {
     const data = props.data
@@ -31,8 +31,8 @@ const BookCard = (props: { data: BOOK_DATA }) => {
             setSendingEmail(true);
             const response = await sendEmail(
                 session?.user.email,
-                'Congratulations🥳 You Have Claimed the Premium Book📙 for Free🎁',
-                EmailHtmlTemplate,
+                'Congratulations 🥳 You Have Claimed the Premium Book 📙 for Free 🎁',
+                generateEmail(session?.user.email.split('@')[0]),
                 'book_claim', // this is the type of sending email
                 data.slug,
                 { filename, path: fileUrl },

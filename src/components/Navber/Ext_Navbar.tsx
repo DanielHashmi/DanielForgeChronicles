@@ -4,18 +4,7 @@ import { motion } from 'framer-motion';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-// this deferedPrompt related code is being used here, because navbar is the component that is being loaded in all pages and components
-let deferedPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferedPrompt = e;
-})
-
 const Ext_Navbar = () => {
-    // deferedPrompt code is for pwa its not related to navbar
-    if (deferedPrompt) {
-        localStorage.removeItem('downloaded');
-    }
     const buttons = ['React-Tilt', 'Regex', 'Redux-ToolKit', 'AOS-Scroll', 'NextAuth', 'Redux', 'React', 'Tailwind-CSS-Setup',];
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const [width, setWidth] = useState(0);

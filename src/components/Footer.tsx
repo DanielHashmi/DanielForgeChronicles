@@ -80,7 +80,9 @@ const Footer = () => {
                         <div className="dark:bg-[#292a2b] bg-background max-w-[19rem] rounded-lg text-sm flex gap-2 p-6 flex-col">
                             <div className="font-bold">Purpose</div>
                             <p>
-                                Here you can learn and get benefit of the blogs, books etc... and don&apos;t waste your time searching for the best resource, We already have done it for you so that you only focus on you goals, avoid being distracted from the ocean of unordered knowledge which might waste your time learning and understanding which doesn&apos;t matters for you and unnecessary for your purpose.
+
+                                Learn what matters most.
+                                We&apos;ve picked the best blogs, books, and resources to save you time and help you stay focused. No need to sort through endless options—we&apos;ve done that for you. Just focus on your goals without any distractions.
                             </p>
                         </div>
                     </div>

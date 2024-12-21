@@ -1,26 +1,20 @@
 'use client'
-import { useState } from "react";
+import { useStore } from "@/context/context";
 
 let deferedPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
+window && window.addEventListener('beforeinstallprompt', (e) => {
     deferedPrompt = e;
 })
 
-// Some of PWA code is inside Ext_Navbar because its a client component and being rendered on all pages.
 
 const Download = () => {
-    const [downloaded, setDownloaded] = useState(localStorage.getItem('downloaded') === 'true');
+    const { downloaded } = useStore();
+
     const download_DFC = async () => {
         if (deferedPrompt) {
-            deferedPrompt.prompt()
-            const user = await deferedPrompt.userChoice;
-            if (user.outcome === 'accepted') {
-                localStorage.setItem('downloaded', 'true');
-                setDownloaded(true);
-            }
-        }
-    }
+            deferedPrompt.prompt();
+        };
+    };
 
     return (
         <div className="text-center xl:w-[90vw] flex flex-col justify-self-center border gap-6 bg-[#f8f8f8] dark:bg-background">
