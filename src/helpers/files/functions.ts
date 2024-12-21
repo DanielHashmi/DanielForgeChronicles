@@ -110,13 +110,13 @@ export const generateEmail = (name: string) => {
             <p>
                 <strong>
                     Visit
-                    <a href="https://danielcodeforge.vercel.app/newsletter" style="color: #6b6b6b;">Newsletter</a>
+                    <a href="https://danielforgechronicles.vercel.app/newsletter" style="color: #6b6b6b;">Newsletter</a>
                 </strong>
                 and subscribe to get instant updates of latest resource as they are available.
 
             </p>
             <p style="text-align: center;">
-                <a href="https://danielcodeforge.vercel.app" class="button">📖 Explore More</a>
+                <a href="https://danielforgechronicles.vercel.app" class="button">📖 Explore More</a>
             </p>
          
         </div>

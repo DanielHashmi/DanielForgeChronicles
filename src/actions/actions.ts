@@ -14,6 +14,7 @@ import { unified } from 'unified';
 import matter from 'gray-matter';
 import path from 'path'
 import fs from 'fs'
+import { generateEmail } from '@/helpers/files/functions';
 
 // Convert Markdown to HTML Function
 const convertMdToHtml = async (filePath: string) => {
@@ -179,11 +180,11 @@ export const subscribeNews = async (email: string) => {
 
     if (!existingUser) {
         await db.collection("news_subscribed_users").insertOne({ email });
-        await sendEmail(email, 'You Have Subscribed to the Newsletter!', 'html here', 'newsletter');
+        await sendEmail(email, 'You Have Subscribed to the Newsletter!', generateEmail(email.split('@')[0]), 'newsletter');
         return true;
     } else if (existingUser) {
         await db.collection("news_subscribed_users").deleteOne({ email });
-        await sendEmail(email, 'You Have Unsubscribed to the Newsletter!', 'html here', 'newsletter');
+        await sendEmail(email, 'You Have Unsubscribed to the Newsletter!', generateEmail(email.split('@')[0]), 'newsletter');
         return true;
     }
 }
