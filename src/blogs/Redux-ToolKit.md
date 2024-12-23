@@ -7,8 +7,6 @@ image: reduxtoolkit.png
 desc: A brief guide of redux toolkit that you make thing clear about state management and the use of redux in you react and next.js project...
 ---
 
-# Redux ToolKit
-
 ## We use redux in big project where we want to use our states, functions etc... to our components directly easily
 
 ## FIrst Install It

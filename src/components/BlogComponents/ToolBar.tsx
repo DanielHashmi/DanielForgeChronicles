@@ -11,8 +11,8 @@ const ToolBar = () => {
     const tools = [
         '/arrow-up.svg',
         '/arrow-down.svg',
-        '/bookmark.svg',
-        '/search.svg',
+        // '/bookmark.svg',
+        // '/search.svg',
         '/align-left.svg'
     ]
 
@@ -32,7 +32,7 @@ const ToolBar = () => {
         <div className="fixed bottom-2 dark:bg-[#232323] bg-white z-40 translate-x-[-50%] left-[50%] p-2 shadow1 flex gap-6 rounded-sm">
             {tools.map((tool, index) => {
                 return (
-                    <div onClick={handleClick} key={index} className={`${tool === '/align-right.svg' && 'block xl:hidden'} size-5 relative smooth hover:scale-110 active:scale-125 cursor-pointer`}>
+                    <div onClick={handleClick} key={index} className={`${tool === '/align-left.svg' && 'block xl:hidden'} size-5 relative smooth hover:scale-110 active:scale-125 cursor-pointer`}>
                         <Image src={tool} data-src={tool} className={`${theme === 'dark' && 'invert'}`} alt="toolbar-icon" fill />
                     </div>
                 )

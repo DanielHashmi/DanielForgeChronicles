@@ -20,11 +20,13 @@ import rehypeSlug from 'rehype-slug'
 import ComicNeue_Regular from "@/app/fonts/Font_Objects/ComicNeue_Regular"
 import Navigation from "@/components/BlogComponents/Navigation"
 import path from 'path'
+import { Metadata } from "next"
 
+// Dynamically Generating Params at Build Time for the BlogPosts
 export const revalidate = 3600; // Rebuild the page
 export async function generateStaticParams() {
-    const folder_path = path.join(process.cwd(), 'src', 'blogs')
-    const file_names_array = fs.readdirSync(folder_path, 'utf-8')
+    const folder_path = path.join(process.cwd(), 'src', 'blogs');
+    const file_names_array = fs.readdirSync(folder_path, 'utf-8');
     const file_names_no_ext = file_names_array.map((filename) => {
         const blogpost = filename.replace(/\.md$/, ''); // Remove file extension
         return { blogpost };
@@ -32,12 +34,31 @@ export async function generateStaticParams() {
     return file_names_no_ext; // [{ blogpost: 'filename' }, { blogpost: 'filename' }]
 }
 
+
+// Dynamically Generate Metadata for Each Blogpost
+export async function generateMetadata({ params }: { params: Promise<{ blogpost: string }> }): Promise<Metadata> {
+    const file_path = path.join(process.cwd(), 'src', 'blogs', `${(await params).blogpost}.md`);
+    const raw_data = fs.readFileSync(file_path, 'utf-8');
+    const { data } = matter(raw_data);
+
+    return {
+        title: data.title,
+        description: data.desc,
+        openGraph: {
+            images: [
+                { url: '/' + data.image }
+            ]
+        }
+    }
+}
+
+
 const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) => {
-    const file_path = path.join(process.cwd(), 'src', 'blogs', `${(await params).blogpost}.md`)
+    const file_path = path.join(process.cwd(), 'src', 'blogs', `${(await params).blogpost}.md`);
     if (!fs.existsSync(file_path)) {
         notFound();
     }
-    const raw_data = fs.readFileSync(file_path, 'utf-8')
+    const raw_data = fs.readFileSync(file_path, 'utf-8');
     const { data, content } = matter(raw_data);
 
     const html_file_content = (await unified()
