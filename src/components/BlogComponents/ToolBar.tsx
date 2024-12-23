@@ -2,7 +2,7 @@
 import { useStore } from "@/context/context";
 import { useTheme } from "next-themes";
 import Image from "next/image"
-import { MouseEvent, useState } from "react";
+import { MouseEvent } from "react";
 
 const ToolBar = () => {
     const { setShow_Navigator, show_Navigator } = useStore();
