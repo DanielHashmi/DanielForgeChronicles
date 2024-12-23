@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import ToolBar from "@/components/Navber/ToolBar"
+import ToolBar from "@/components/BlogComponents/ToolBar"
 import PatrickHand_Regular from "@/app/fonts/Font_Objects/PatrickHand_Regular"
 import { notFound } from "next/navigation"
 
@@ -80,7 +80,7 @@ const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) =
                     <h1 className={`${ComicNeue_Regular.className} md:text-5xl sm:text-4xl text-3xl font-bold`}>{data.title}</h1>
 
                     <div className={`relative mr-8 sm:mr-0 xl:w-[60vw] md:h-[70vh] h-[30vh] sm:h-[40vh] rounded-xl transition-all duration-1000 cursor-pointer`}>
-                        <Image className="object-cover" src={`/${data.image}`} alt="logo" fill />
+                        <Image className="object-cover" src={`/${data.image || 'upcoming.png'}`} alt="logo" fill />
                     </div>
 
                     <p dangerouslySetInnerHTML={{ __html: html_file_content }} className={`${PatrickHand_Regular.className}

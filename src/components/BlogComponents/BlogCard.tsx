@@ -11,7 +11,7 @@ const BlogCard = (props: { data: MD_DATA }) => {
         <div className="bg-white dark:bg-[#292a2b] smooth cursor-pointer hover:scale-105 h-fit min-h-[26rem] max-w-[384px] text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
             <Link href={`/resource/blog/${data.slug}`}>
                 <div className="h-52 w-full relative" >
-                    <Image className="object-cover rounded-md" src={`/${data.image}`} alt="image" fill />
+                    <Image className="object-cover rounded-md" src={`/${data.image ||'upcoming.png'}`} alt="blogpost-image" fill />
                 </div>
             </Link>
 

@@ -105,7 +105,7 @@ export const generateEmail = (name: string, type: string) => {
                 Hey! ${name}<br>
                 Welcome to <strong>DanielForgeChronicles</strong>, a <em>learning resource</em> brought to you by
                 <strong>DanielCodeForge</strong>.
-                We’re excited to have you join our community of curious minds! <span class="emoji">🌍</span>
+                We’re excited to have you join our community! <span class="emoji">🌍</span>
             </p>
             <p>
                 <strong>
@@ -242,13 +242,13 @@ export const generateEmail = (name: string, type: string) => {
         <div class="email-body">
             <p>
                 Hey! ${name}<br>
-                We're sorry to see you go from <strong>DanielForgeChronicles</strong>. It's sad to see you unsubscribe. 😢
+                We're sad to see you unsubscribing <strong>DanielForgeChronicles</strong> Newsletter. If you feel disappointed please let us know how we can improve. 😢
             </p>
             <p>
-                If you change your mind, you can always rejoin DanielForgeChronicles!
+                If you change your mind, you can always subscribe Newsletter again!
             </p>
             <p style="text-align: center;">
-                <a href="https://danielforgechronicles.vercel.app/newsletter" class="button">🔄 Rejoin Us</a>
+                <a href="https://danielforgechronicles.vercel.app/newsletter" class="button">🔄 Subscribe Newsletter</a>
             </p>
          
         </div>

@@ -12,7 +12,7 @@ const Newsletter = () => {
     const subscribe_news = async () => {
         if (session) {
             setLoading(true);
-            const subscribed = await subscribeNews(session?.user.email);
+            const subscribed = await subscribeNews(session?.user.email, session?.user.name);
             if (subscribed) {
                 setLoading(false);
                 set_is_user_subscribed_news(!is_user_subscribed_news);

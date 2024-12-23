@@ -172,7 +172,7 @@ export const getStaredUsers = async (slug: string) => {
 
 
 // Subscribe News
-export const subscribeNews = async (email: string) => {
+export const subscribeNews = async (email: string, name: string) => {
     const client = await clientPromise;
     const db = client.db("danielforgechroniclesDB");
 
@@ -180,11 +180,11 @@ export const subscribeNews = async (email: string) => {
 
     if (!existingUser) {
         await db.collection("news_subscribed_users").insertOne({ email });
-        await sendEmail(email, 'You Have Subscribed to the Newsletter!', generateEmail(email.split('@')[0], 'book_claim'), 'newsletter');
+        await sendEmail(email, 'You Have Subscribed to the Newsletter!', generateEmail(name, 'book_claim'), 'newsletter');
         return true;
     } else if (existingUser) {
         await db.collection("news_subscribed_users").deleteOne({ email });
-        await sendEmail(email, 'You Have Unsubscribed to the Newsletter!', generateEmail(email.split('@')[0], 'newsletter'), 'newsletter');
+        await sendEmail(email, 'You Have Unsubscribed to the Newsletter!', generateEmail(name, 'newsletter'), 'newsletter');
         return true;
     }
 }
