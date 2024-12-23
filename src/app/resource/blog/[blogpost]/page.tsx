@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<{ blogpost:
     return {
         title: data.title,
         description: data.desc,
+        metadataBase: new URL(process.env.BASE_URL),
         openGraph: {
             images: [
                 { url: '/' + data.image }
