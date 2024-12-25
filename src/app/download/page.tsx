@@ -3,6 +3,7 @@ import { useStore } from "@/context/context";
 
 let deferedPrompt;
 if (window) window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
     deferedPrompt = e;
 })
 

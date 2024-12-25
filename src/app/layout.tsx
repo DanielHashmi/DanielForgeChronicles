@@ -61,9 +61,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-pt-40 scroll-smooth select-none">
+    <html lang="en" className="scroll-pt-40 scroll-smooth select-none touch-pan-y">
       <body
-        className={`${ComicNeue_Regular.className} antialiased overflow-x-hidden grid`}
+        className={`${ComicNeue_Regular.className} antialiased grid`}
       >
         <SessionWrapper>
           <ThemeProvider

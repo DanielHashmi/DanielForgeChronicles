@@ -24,7 +24,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
     }
 
     const claim_book = async () => {
-        if (!claimed) {
+        if (!claimed && !sendingEmail) {
             const fileUrl = 'https://drive.google.com/uc?export=download&id=1eS7jr5LKf15YW_w7obUtBEWSiQLzSqH_'; // this is insecure here! and this is static for only one book, but i don't want that i want it to be dynamic for each book because this bookcard is not only for one book
             const filename = 'Dunla Math Handbook First Edition (2024) Authored by Daniel Hashmi (DanielCodeForge).pdf'
 
@@ -57,7 +57,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
         const is_user_claimed = async () => {
             const claimed_users: string[] = await getClaimedUsers(props.data.slug);
             if (session?.user.email) setClaimed(claimed_users.includes(session?.user.email));
-            // setClaimedUsersCount(claimed_users.length); // if i like to demo the claimed user then maybe i will inshalla // work here
+            // setClaimedUsersCount(claimed_users.length); // if i like to demo the claimed user then maybe i will inshallah // work here
         };
         is_user_claimed();
     }, [session?.user.email, props.data.slug])

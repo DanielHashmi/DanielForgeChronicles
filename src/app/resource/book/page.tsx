@@ -9,11 +9,8 @@ const Book = async () => {
     const session = await getServerSession(auth_options as unknown as AuthOptions);
     const status = session ? 'authenticated' : 'unauthenticated';
     const isUserSubscribed = await checkSubscription(session?.user.email);
-    
-    if (status === 'unauthenticated') {
-        redirect('/membership');
-    }
-    else if (status === 'authenticated' && !isUserSubscribed) {
+
+    if (status === 'unauthenticated' || status === 'authenticated' && !isUserSubscribed) {
         redirect('/membership');
     }
 

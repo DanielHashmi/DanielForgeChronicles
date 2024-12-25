@@ -14,7 +14,6 @@ interface PropType {
 
 export const contextHook = createContext<PropType | null>(null);
 
-
 export const BigProMan = ({ children }: { children: ReactNode }) => {
     const [show_Navigator, setShow_Navigator] = useState(false)
     const [blog_data, setBlog_data] = useState<{ data: MD_DATA; content: string }[]>()

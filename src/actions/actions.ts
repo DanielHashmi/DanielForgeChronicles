@@ -129,27 +129,23 @@ export const checkSubscription = async (email: string) => {
 }
 
 // Save array in database
-export const saveArrayInDB = async (email: string, slug: string, arrayName: string) => { // Work Here!
+export const saveArrayInDB = async (email: string, slug: string, arrayName: string) => {
     const client = await clientPromise;
     const db = client.db("danielforgechroniclesDB");
+    const book = await db.collection("books").findOne({ "data.slug": slug });// work here
 
-    const existingBook = await db.collection("books").findOne({ "data.slug": slug });
-
-    if (existingBook) {
-        existingBook[arrayName] = existingBook[arrayName] || [];
-        if (!existingBook[arrayName].includes(email)) {
-            existingBook[arrayName] = [...existingBook[arrayName], email];
-            await db.collection("books").updateOne({ "data.slug": slug }, { $set: { [arrayName]: existingBook[arrayName] } });
-        } else {
-            if (['stared_users'].includes(arrayName)) { // this will kinda toggle the user in db
-                existingBook[arrayName] = existingBook[arrayName].filter((existingEmail: string) => existingEmail !== email);
-                await db.collection("books").updateOne({ "data.slug": slug }, { $set: { [arrayName]: existingBook[arrayName] } });
-            }
+    if (book) {
+        book[arrayName] = book[arrayName] || [];
+        const index = book[arrayName].indexOf(email);
+        if (index > -1 && arrayName === 'stared_users') { // i'm setting a condition for specifically for stared_users because i don't want delete claimed users onces they have claimed the book
+            book[arrayName].splice(index, 1);
+        } else if (index === -1) {
+            book[arrayName].push(email);
         }
+        await db.collection("books").updateOne({ "data.slug": slug }, { $set: { [arrayName]: book[arrayName] } });
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 // Add or Delete Star For Book

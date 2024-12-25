@@ -6,7 +6,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   caret-color: transparent;
 }
-input{
+
+input {
   caret-color: rgb(161, 161, 161);
 }
 
@@ -38,27 +39,32 @@ input{
   opacity: 1;
 }
 
-.jarking_animation{
+.jarking_animation {
   transition: 0.4s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
-html body[data-scroll-locked]{
+html body[data-scroll-locked] {
   overflow-y: visible !important;
   margin-right: 0px !important;
 }
-.success{
+
+.success {
   filter: saturate(0);
 }
-::-webkit-scrollbar{
+
+::-webkit-scrollbar {
   width: 2px;
 }
-::-webkit-scrollbar-track{
+
+::-webkit-scrollbar-track {
   background-color: black;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.101);
   border-radius: 1rem;
 }
+
 .card_shadow {
   box-shadow: 15px 16px 0 0 #605f5f;
   border: 5px solid #ffffff;
@@ -131,6 +137,7 @@ html body[data-scroll-locked]{
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 13.73%;
     --foreground: 60 9.1% 97.8%;
@@ -164,6 +171,7 @@ html body[data-scroll-locked]{
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

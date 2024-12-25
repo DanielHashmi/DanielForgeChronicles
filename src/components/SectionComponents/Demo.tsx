@@ -3,7 +3,7 @@ import Button from "../OverallComponents/Button"
 
 const Demo = () => {
     return (
-        <div className="lg:h-[70vh] md:h-fit h-[70vh] px-6 pt-6 md:p-12 lg:p-0 flex flex-col lg:flex-row lg:mt-20 items-center">
+        <div className="lg:h-[70vh] md:h-fit h-[70vh] px-6 pt-6 md:p-12 lg:p-0 flex flex-col lg:flex-row lg:mt-20 items-center overflow-hidden">
             <div className="lg:w-1/2">
                 <div className="flex flex-col gap-6 text-center lg:text-start lg:pl-16 2xl:px-20">
                     <div className="flex flex-col">
