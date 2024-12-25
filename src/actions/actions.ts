@@ -246,3 +246,14 @@ export const handle_send = async (e: FormData) => { // Work Here
     return sended;
 
 }
+
+// urls for generating sitemap
+export const get_urls = async (dir: string) => {
+    const dir_path = path.join(process.cwd(), 'src', dir + 's');
+    const urls = fs.readdirSync(dir_path, 'utf-8').map((name) => (
+        {
+            url: `${process.env.BASE_URL}/resource/${dir}/${name.replace(/\.md$/, '')}`,
+        }
+    ));
+    return urls;
+}

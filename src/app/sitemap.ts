@@ -1,16 +1,5 @@
+import { get_urls } from '@/actions/actions';
 import type { MetadataRoute } from 'next'
-import PATH from 'path';
-import fs from 'fs';
-
-const get_urls = async (dir: string) => {
-    const path = PATH.join(process.cwd(), 'src', dir + 's');
-    const urls = fs.readdirSync(path, 'utf-8').map((name) => (
-        {
-            url: `${process.env.BASE_URL}/resource/${dir}/${name.replace(/\.md$/, '')}`,
-        }
-    ));
-    return urls;
-}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const blogpost_urls = await get_urls('blog');
