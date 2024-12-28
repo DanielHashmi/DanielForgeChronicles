@@ -5,7 +5,7 @@ import Navbar from "@/components/Navber/Navbar";
 import ComicNeue_Regular from "./fonts/Font_Objects/ComicNeue_Regular";
 import { ThemeProvider } from "@/components/DarkMode/ThemeProvider";
 import SessionWrapper from "./api/auth/[...nextauth]/SessionWrapper";
-import Footer from "@/components/Footer";
+import Footer from "@/components/Footer/Footer";
 
 const APP_NAME = "DanielForgeChronicles";
 const APP_DEFAULT_TITLE = "DanielForgeChronicles";
@@ -45,6 +45,7 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION,
   },
+  metadataBase: new URL(process.env.BASE_URL),
   verification: {
     google: 'Kl332XRCTkGZ8QmsHARl35yrMYRiv-poWdUH-TfnDEs',
   },

@@ -9,7 +9,7 @@ const Logo_Part = () => {
             </Link>
             <div className="">
                 <div className={`font-bold sm:text-xl`}>
-                    DanielForgeChronicles
+                    DanielForgeChronicles™
                 </div>
                 <div className="sm:text-sm text-xs font-bold text-gray-400">DanielCodeForge Product</div>
             </div>

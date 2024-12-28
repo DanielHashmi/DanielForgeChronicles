@@ -1,10 +1,11 @@
 'use client'
 import Link from "next/link"
-import Logo_Part from "./Navber/Logo_Part"
+import Logo_Part from "../Navber/Logo_Part"
 import Image from "next/image"
-import Button from "./OverallComponents/Button"
+import Button from "../OverallComponents/Button"
 import { handle_send } from "@/actions/actions"
 import { useState } from "react"
+import Attribution from "./Attribution"
 
 const Footer = () => {
     const [sent, setSent] = useState(false);
@@ -47,6 +48,7 @@ const Footer = () => {
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <a className="hover:font-bold" href={'https://danielcodeforge.vercel.app'}>Company</a>
+                                    <a className="hover:font-bold" target="_blank" href={'https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1'}>Term of Use</a>
                                     <a className="hover:font-bold" target="_blank" href={'https://docs.google.com/document/d/1CfhpKECKC9TiTpRSuqkovdhr2dHGnfQU2mC8ARP8PTY/edit?usp=drive_link'}>Privacy Policy</a>
                                 </div>
                             </div>
@@ -88,17 +90,7 @@ const Footer = () => {
                     </div>
 
                 </div>
-
-                <div className="bg-white dark:bg-[#292a2b] flex items-center">
-                    <a href="#" className="pl-4">👆</a>
-                    <div className="p-3 rounded-lg text-center w-full flex justify-center gap-2 text-xs sm:text-sm md:text-base">
-                        <span className="opacity-60">ALL RIGHTS RESERVED COPYRIGHT © DANIELFORGECHRONICLES  ( DANIELCODEFORGE )</span>
-                        <a href={'https://danielcodeforge.vercel.app'}>
-                            <Image className="rounded-full" src={'/danielcodeforge.png'} alt="logo" width={25} height={25} />
-                        </a>
-                    </div>
-                </div>
-
+                <Attribution />
             </div>
         </div>
     )
