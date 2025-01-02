@@ -1,6 +1,4 @@
-import { DateRule, defineType, ObjectRule, ReferenceRule, SlugRule, StringRule, TextRule } from 'sanity';
-import { defineField } from 'sanity';
-
+import { defineField, DateRule, defineType, ObjectRule, ReferenceRule, SlugRule, StringRule, TextRule } from 'sanity';
 const blogpostSchema = defineType({
     name: 'blogpost',
     type: 'document',
