@@ -14,7 +14,7 @@ import { unified } from 'unified';
 import matter from 'gray-matter';
 import path from 'path'
 import fs from 'fs'
-import { generateEmail } from '@/helpers/files/functions';
+import { generateEmail } from '@/lib/functions';
 import { client } from '@/sanity/utils/client';
 import { all_blogs_query } from '@/sanity/grok/queries';
 

@@ -5,7 +5,7 @@ import { BOOK_DATA } from "@/types/interfaces"
 import { useEffect, useState } from "react"
 import { getClaimedUsers, getStaredUsers, saveOrDeleteStar, sendEmail } from "@/actions/actions"
 import { useSession } from "next-auth/react"
-import { generateEmail } from "@/helpers/files/functions"
+import { generateEmail } from "@/lib/functions"
 
 const BookCard = (props: { data: BOOK_DATA }) => {
     const data = props.data
