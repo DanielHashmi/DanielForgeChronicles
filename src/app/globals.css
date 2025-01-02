@@ -38,7 +38,9 @@ input {
   visibility: visible;
   opacity: 1;
 }
-
+.long_animation{
+  transition: all 4s ease;
+}
 .jarking_animation {
   transition: 0.4s cubic-bezier(0.42, 0, 0.58, 1);
 }

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "std": "sanity dev",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -32,6 +33,7 @@
     "nodemailer": "^6.9.16",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-portable-text": "^0.6.0",
     "rehype": "^13.0.2",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-document": "^7.0.3",

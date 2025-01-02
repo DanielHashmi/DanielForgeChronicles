@@ -1,14 +1,15 @@
 // 'use client' // Not Important! because this is already being used inside a client component so it is already running on client side
 import Image from "next/image"
 import Button from "../OverallComponents/Button"
-import { BOOK_DATA } from "@/types/interfaces"
+import { BOOK } from "@/types/interfaces"
 import { useEffect, useState } from "react"
-import { getClaimedUsers, getStaredUsers, saveOrDeleteStar, sendEmail } from "@/actions/actions"
+import { getClaimedUsers, getStaredUsers, saveClaimedUser, saveOrDeleteStar, sendEmail } from "@/actions/actions"
 import { useSession } from "next-auth/react"
 import { generateEmail } from "@/lib/functions"
+import PortableText from "react-portable-text"
+import imgBuilder from "@/sanity/utils/imgBuilder"
 
-const BookCard = (props: { data: BOOK_DATA }) => {
-    const data = props.data
+const BookCard = ({ data }: { data: BOOK }) => {
     const { data: session } = useSession();
     const [show, setShow] = useState(false);
     // For Stars
@@ -25,9 +26,6 @@ const BookCard = (props: { data: BOOK_DATA }) => {
 
     const claim_book = async () => {
         if (!claimed && !sendingEmail) {
-            const fileUrl = 'https://drive.google.com/uc?export=download&id=1eS7jr5LKf15YW_w7obUtBEWSiQLzSqH_'; // this is insecure here! and this is static for only one book, but i don't want that i want it to be dynamic for each book because this bookcard is not only for one book
-            const filename = 'Dunla Math Handbook First Edition (2024) Authored by Daniel Hashmi (DanielCodeForge).pdf'
-
             setSendingEmail(true);
             const response = await sendEmail(
                 session?.user.email,
@@ -35,9 +33,12 @@ const BookCard = (props: { data: BOOK_DATA }) => {
                 generateEmail(session?.user.name, 'book_claim'),
                 'book_claim', // this is the type of sending email
                 data.slug,
-                { filename, path: fileUrl },
+                { filename: data.file.originalFilename, path: data.file.url },
             )
-            if (response) setClaimed(true);
+            if (response) {
+                setClaimed(true);
+                await saveClaimedUser(session?.user.email, data.slug);
+            }
             setSendingEmail(false);
         }
     }
@@ -45,22 +46,22 @@ const BookCard = (props: { data: BOOK_DATA }) => {
     // check stars initially and so on
     useEffect(() => {
         const get_stared_users = async () => {
-            const stared_users: string[] = await getStaredUsers(props.data.slug);
+            const stared_users: string[] = await getStaredUsers(data.slug);
             setAlreadyStared(stared_users.includes(session?.user.email));
             setStarCount(stared_users.length);
         };
         get_stared_users();
-    }, [session?.user.email, props.data.slug, alreadyStared])
+    }, [session?.user.email, data.slug, alreadyStared])
 
     // check claims initially and so on
     useEffect(() => {
         const is_user_claimed = async () => {
-            const claimed_users: string[] = await getClaimedUsers(props.data.slug);
+            const claimed_users: string[] = await getClaimedUsers(data.slug);
             if (session?.user.email) setClaimed(claimed_users.includes(session?.user.email));
             // setClaimedUsersCount(claimed_users.length); // if i like to demo the claimed user then maybe i will inshallah // work here
         };
         is_user_claimed();
-    }, [session?.user.email, props.data.slug])
+    }, [session?.user.email, data.slug])
 
     return (
         <div className="bg-white dark:bg-[#292a2b] flex flex-col gap-4 smooth sm_scale text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
@@ -68,7 +69,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
 
                 <a href={'https://hashmiverse56.gumroad.com/l/vhymr'}>
                     <div className="size-52 relative" >
-                        <Image className="object-cover rounded-md" src={data.image} alt="image" fill />
+                        <Image className="object-cover rounded-md" src={imgBuilder(data.image).width(720).url() || 'upcoming.png'} alt="image" fill />
                     </div>
                 </a>
                 <div className="flex flex-col gap-4 w-full">
@@ -77,7 +78,7 @@ const BookCard = (props: { data: BOOK_DATA }) => {
                         <div className="flex gap-2 items-center">
                             <span className="flex gap-2">
                                 <Image className="rounded-full" src={'/Daniel Hashmi.jpg'} alt="logo" width={20} height={20} />
-                                <span className="font-bold">Author: </span>{data.author}</span>
+                                <span className="font-bold">Author: </span>{data.author.name}</span>
                         </div>
 
                         <div>
@@ -109,8 +110,8 @@ const BookCard = (props: { data: BOOK_DATA }) => {
                 </div>
             </div>
 
-            <div className={`${show ? 'max-h-[50rem]' : 'max-h-0 w-fit'} jarking_animation flex-col overflow-hidden`}>
-                <p dangerouslySetInnerHTML={{ __html: data.content }} className="py-2 text-sm prose prose-h2:m-0 prose-h2:mb-4 dark:prose-invert"></p>
+            <div className={`${show ? 'max-h-[200rem]' : 'max-h-0 w-fit'} jarking_animation text-sm prose dark:prose-invert flex-col overflow-hidden`}>
+                <PortableText content={data.detail} />
             </div>
         </div >
     )

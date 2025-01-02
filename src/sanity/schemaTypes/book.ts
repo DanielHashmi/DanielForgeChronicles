@@ -54,6 +54,14 @@ const bookSchema = defineType({
             title: 'Detail',
             of: [{ type: 'block' }],
             validation: (Rule: ArrayRule<unknown>) => Rule.required()
+        }),
+        defineField({
+            name: 'file',
+            type: 'file',
+            title: 'File',
+            options: {
+                accept: 'application/pdf',
+            },
         })
     ]
 });

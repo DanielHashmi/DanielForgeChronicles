@@ -1,33 +1,9 @@
 'use server'
 import clientPromise from '@/mongodb/connect';
-import { BLOGPOST, BOOK, BOOK_DB_DATA } from '@/types/interfaces';
-import { transformerCopyButton } from '@rehype-pretty/transformers';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypeDocument from 'rehype-document';
-import rehypeFormat from 'rehype-format';
-import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeSlug from 'rehype-slug';
-import rehypeStringify from 'rehype-stringify';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
-import { unified } from 'unified';
-import matter from 'gray-matter';
-import path from 'path'
-import fs from 'fs'
+import { BLOGPOST, BOOK } from '@/types/interfaces';
 import { generateEmail } from '@/lib/functions';
 import { client } from '@/sanity/utils/client';
-import { all_blogs_query } from '@/sanity/grok/queries';
-
-// Convert Markdown to HTML Function
-const convertMdToHtml = async (filePath: string) => {
-    const convertedData = fs.readdirSync(path.join(process.cwd(), filePath)).map((file_name: string) => {
-        if (fs.existsSync(path.join(process.cwd(), filePath, file_name)) && file_name.endsWith('.md')) {
-            const { data, content } = matter(fs.readFileSync(path.join(process.cwd(), filePath, file_name)))
-            return { data, content }
-        }
-    }).sort((a, b) => Number(new Date(b.data.date)) - Number(new Date(a.data.date)));
-    return convertedData;
-}
+import { all_blogs_query, all_books_query } from '@/sanity/grok/queries';
 
 // Blogs
 export const get_blogs = async (limit: number) => {
@@ -53,52 +29,8 @@ export const get_books_count = async () => {
 
 // Books
 export const get_books = async (limit: number) => {
-    const book_data_objects_array = await convertMdToHtml('src/books') as BOOK_DB_DATA[];
-
-    // save data in the DB
-    const client = await clientPromise;
-    const db = client.db("danielforgechroniclesDB");
-    let filteredDBObjectsArray = (await db.collection("books").find().toArray() as unknown) as BOOK_DB_DATA[]; // db current data
-    filteredDBObjectsArray = filteredDBObjectsArray.filter((dbBook) => book_data_objects_array.some((book) => book.data.slug === dbBook.data.slug))
-
-    book_data_objects_array.forEach((dir_obj) => {
-        if (!filteredDBObjectsArray.some((db_book) => db_book.data.slug === dir_obj.data.slug)) {
-            filteredDBObjectsArray.push(dir_obj)
-        }
-    })
-
-    // await db.collection('books').deleteMany({}); // Caution! this will dynamically delete books from db as you delete data from the directory
-    filteredDBObjectsArray.forEach(async (data) => {
-        const existingBook = await db.collection("books").findOne({ "data.slug": data.data.slug });
-        if (!existingBook) {
-            await db.collection("books").insertOne(data);
-        }
-    })
-
-    const processedData = await Promise.all(book_data_objects_array.map(async (obj) => {
-        obj.content = (await unified()
-            .use(remarkParse)
-            .use(remarkRehype)
-            .use(rehypeDocument)
-            .use(rehypeFormat)
-            .use(rehypeStringify)
-            .use(rehypeAutolinkHeadings)
-            .use(rehypeSlug)
-            .use(rehypePrettyCode, {
-                theme: 'material-theme',
-                transformers: [
-                    transformerCopyButton({
-                        visibility: 'always',
-                        feedbackDuration: 3000,
-                    }),
-                ],
-            })
-            .process(obj?.content)).toString();
-        return obj;
-
-    }))
-
-    return processedData.slice(0, limit);
+    const book_data_objects_array: BOOK[] = await client.fetch(all_books_query);
+    return book_data_objects_array.slice(0, limit);
 }
 
 
@@ -127,32 +59,47 @@ export const checkSubscription = async (email: string) => {
     } else {
         return false;
     }
-
 }
 
-// Save array in database
-export const saveArrayInDB = async (email: string, slug: string, arrayName: string) => {
-    const client = await clientPromise;
-    const db = client.db("danielforgechroniclesDB");
-    const book = await db.collection("books").findOne({ "data.slug": slug });// work here
+// Dynamic mongo with sanity
+export const saveData = async () => {
+    const mongoClient = await clientPromise;
+    const db = mongoClient.db("danielforgechroniclesDB");
+    const books_slugs: string[] = await client.fetch(`*[_type == 'book'].slug.current`); // sanity
 
-    if (book) {
-        book[arrayName] = book[arrayName] || [];
-        const index = book[arrayName].indexOf(email);
-        if (index > -1 && arrayName === 'stared_users') { // i'm setting a condition for specifically for stared_users because i don't want delete claimed users onces they have claimed the book
-            book[arrayName].splice(index, 1);
-        } else if (index === -1) {
-            book[arrayName].push(email);
+    books_slugs.forEach(async (slug) => {
+        const db_book = await db.collection("books").findOne({ "slug": slug });
+        if (!db_book) {
+            await db.collection("books").insertOne({ slug: slug, 'stared_users': [], 'claimed_users': [] });
         }
-        await db.collection("books").updateOne({ "data.slug": slug }, { $set: { [arrayName]: book[arrayName] } });
-        return true;
-    }
-    return false;
+    })
 }
+
 
 // Add or Delete Star For Book
 export const saveOrDeleteStar = async (email: string, slug: string) => {
-    return await saveArrayInDB(email, slug, 'stared_users');
+    const client = await clientPromise;
+    const db = client.db("danielforgechroniclesDB");
+    const book = await db.collection("books").findOne({ "slug": slug });
+    if (book) {
+        if (!book.stared_users.includes(email)) {
+            await db.collection("books").updateOne({ "slug": slug }, { $set: { 'stared_users': [...book.stared_users, email] } });
+        } else {
+            await db.collection("books").updateOne({ "slug": slug }, { $set: { 'stared_users': book.stared_users.filter((user) => user !== email) } });
+        }
+    }
+}
+
+// Save claimed user
+export const saveClaimedUser = async (email: string, slug: string) => {
+    const client = await clientPromise;
+    const db = client.db("danielforgechroniclesDB");
+    const book = await db.collection("books").findOne({ "slug": slug });
+    if (book) {
+        if (!book.claimed_users.includes(email)) {
+            await db.collection("books").updateOne({ "slug": slug }, { $set: { 'claimed_users': [...book.claimed_users, email] } });
+        }
+    }
 }
 
 
@@ -160,9 +107,8 @@ export const saveOrDeleteStar = async (email: string, slug: string) => {
 export const getStaredUsers = async (slug: string) => {
     const client = await clientPromise;
     const db = client.db("danielforgechroniclesDB");
-
-    const book_data = await db.collection("books").findOne({ "data.slug": slug });
-    if (book_data?.stared_users) {
+    const book_data = await db.collection("books").findOne({ "slug": slug });
+    if (book_data) {
         return book_data.stared_users;
     }
     return [];
@@ -200,8 +146,8 @@ export const getClaimedUsers = async (slug: string) => {
     const client = await clientPromise;
     const db = client.db("danielforgechroniclesDB");
 
-    const book_data = await db.collection("books").findOne({ "data.slug": slug });
-    if (book_data?.claimed_users) {
+    const book_data = await db.collection("books").findOne({ "slug": slug });
+    if (book_data) {
         return book_data.claimed_users;
     }
     return [];
@@ -225,7 +171,6 @@ export const sendEmail = async (to: string, subject: string, html: string, type:
         const data = await response.json();
 
         if (response.ok) {
-            if (type === 'book_claim') console.log(await saveArrayInDB(to, book_slug, 'claimed_users') ? 'Claimed User Has Been Saved In DB' : 'Error! Saving Claimed User To DB');
             console.log("Email sent successfully!"); // Work Here!
             return true;
         } else {
@@ -242,7 +187,6 @@ export const sendEmail = async (to: string, subject: string, html: string, type:
 export const handle_send = async (e: FormData) => { // Work Here
     const sended = await sendEmail(process.env.COMPANY_EMAIL, 'You have received an email from <DanielForgeChronicles> User!', e.get('message') as string | null, 'message', undefined, undefined, e.get('email') as string | null);
     return sended;
-
 }
 
 // urls for generating sitemap work here
@@ -252,6 +196,5 @@ export const get_urls = async (of: string) => {
             url: `${process.env.BASE_URL}/resource/${of}/${slug}`,
         }
     });
-
     return urls;
 }

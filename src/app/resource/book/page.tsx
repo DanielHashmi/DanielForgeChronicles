@@ -1,4 +1,4 @@
-import { MD_DATA } from "@/types/interfaces"
+import { BOOK } from "@/types/interfaces"
 import { checkSubscription, get_books } from "@/actions/actions"
 import { AuthOptions, getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
@@ -14,7 +14,7 @@ const Book = async () => {
         redirect('/membership');
     }
 
-    const book_data_objects_array: { data: MD_DATA, content: string }[] = await get_books(6) as unknown as { data: MD_DATA, content: string }[];
+    const book_data_objects_array: BOOK[] = await get_books(6);
 
     return <ClientBook book_data_objects_array={book_data_objects_array} />
 }

@@ -1,5 +1,6 @@
 'use client'
-import { MD_DATA, USER_GOOGLE_DATA } from "@/types/interfaces";
+import { saveData } from "@/actions/actions";
+import { BLOGPOST, USER_GOOGLE_DATA } from "@/types/interfaces";
 import { createContext, Dispatch, ReactNode, useContext, useEffect, useState, useCallback } from "react";
 
 interface PropType {
@@ -7,8 +8,8 @@ interface PropType {
     show_Navigator: boolean;
     set_user_data: Dispatch<USER_GOOGLE_DATA>;
     user_data: USER_GOOGLE_DATA;
-    blog_data: { data: MD_DATA; content: string }[];
-    setBlog_data: Dispatch<{ data: MD_DATA; content: string }[]>;
+    blog_data: BLOGPOST[];
+    setBlog_data: Dispatch<BLOGPOST[]>;
     downloaded: boolean;
 }
 
@@ -16,7 +17,7 @@ export const contextHook = createContext<PropType | null>(null);
 
 export const BigProMan = ({ children }: { children: ReactNode }) => {
     const [show_Navigator, setShow_Navigator] = useState(false);
-    const [blog_data, setBlog_data] = useState<{ data: MD_DATA; content: string }[]>([]);
+    const [blog_data, setBlog_data] = useState<BLOGPOST[]>([]);
     const [user_data, set_user_data] = useState<USER_GOOGLE_DATA>({} as USER_GOOGLE_DATA);
     const [deferedPrompt, setDeferedPrompt] = useState<Event | null>(null);
     const [downloaded, setDownloaded] = useState(localStorage.getItem('downloaded') === 'true');
@@ -31,6 +32,7 @@ export const BigProMan = ({ children }: { children: ReactNode }) => {
     }, []);
 
     useEffect(() => {
+        saveData(); // called to save the data from sanity to mongo
         if (window) {
             window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
             window.addEventListener('appinstalled', handleAppInstalled);

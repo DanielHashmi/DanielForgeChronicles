@@ -1,16 +1,16 @@
 'use client'
-import { BLOGPOST, MD_DATA } from "@/types/interfaces"
+import { BLOGPOST, BOOK } from "@/types/interfaces"
 import LoadMoreButton from "@/components/OverallComponents/LoadMoreButton"
 import BookCards from "@/components/BookComponents/BookCards"
 import { useState } from "react"
 import { get_books } from "@/actions/actions"
 
-const ClientBook = ({ book_data_objects_array }: { book_data_objects_array: { data: MD_DATA; content: string }[] }) => {
+const ClientBook = ({ book_data_objects_array }: { book_data_objects_array: BOOK[] }) => {
     const [limit, setLimit] = useState(6);
     const [initialBookData, setInitialBookData] = useState(book_data_objects_array);
 
     const loadMoreFunc = async () => {
-        const new_book_data_objects_array = (await get_books(limit + 3) as { data: MD_DATA, content: string }[]);
+        const new_book_data_objects_array = await get_books(limit + 3);
         setInitialBookData(new_book_data_objects_array);
         setLimit(limit + 3);
     }
