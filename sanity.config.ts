@@ -7,9 +7,8 @@ export default defineConfig({
   name: 'default',
   title: 'DanielForgeChronicles',
 
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-
+  projectId: 'j72oknuv',
+  dataset: 'production',
   plugins: [structureTool(), visionTool(), codeInput()],
 
   schema: {

@@ -1,6 +1,6 @@
 'use server'
 import clientPromise from '@/mongodb/connect';
-import { BLOGPOST, BOOK_DB_DATA } from '@/types/interfaces';
+import { BLOGPOST, BOOK, BOOK_DB_DATA } from '@/types/interfaces';
 import { transformerCopyButton } from '@rehype-pretty/transformers';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeDocument from 'rehype-document';
@@ -46,7 +46,7 @@ export const get_blogs_count = async () => {
 
 // Books Count
 export const get_books_count = async () => {
-    const book_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'books'));
+    const book_data_objects_array: BOOK[] = await client.fetch(`*[_type == 'book']`);
     return book_data_objects_array.length || 0;
 }
 
@@ -246,12 +246,12 @@ export const handle_send = async (e: FormData) => { // Work Here
 }
 
 // urls for generating sitemap work here
-export const get_urls = async (dir: string) => {
-    const dir_path = path.join(process.cwd(), 'src', dir + 's');
-    const urls = fs.readdirSync(dir_path, 'utf-8').map((name) => (
-        {
-            url: `${process.env.BASE_URL}/resource/${dir}/${name.replace(/\.md$/, '')}`,
+export const get_urls = async (of: string) => {
+    const urls: { url: string }[] = (await client.fetch(`*[_type == '${of === 'blog' ? 'blogpost' : of}'].slug.current`) as string[]).map((slug) => {
+        return {
+            url: `${process.env.BASE_URL}/resource/${of}/${slug}`,
         }
-    ));
+    });
+
     return urls;
 }
