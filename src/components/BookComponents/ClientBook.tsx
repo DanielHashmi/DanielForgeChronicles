@@ -1,5 +1,5 @@
 'use client'
-import { MD_DATA } from "@/types/interfaces"
+import { BLOGPOST, MD_DATA } from "@/types/interfaces"
 import LoadMoreButton from "@/components/OverallComponents/LoadMoreButton"
 import BookCards from "@/components/BookComponents/BookCards"
 import { useState } from "react"
@@ -20,7 +20,7 @@ const ClientBook = ({ book_data_objects_array }: { book_data_objects_array: { da
             <div className="flex p-6 gap-6 flex-col items-center">
                 <div className="text-4xl">Books</div>
                 <BookCards book_data_objects_array={initialBookData} />
-                <LoadMoreButton data={initialBookData} loadMoreFunc={loadMoreFunc} limit={limit} />
+                <LoadMoreButton data={initialBookData as unknown as BLOGPOST[]} loadMoreFunc={loadMoreFunc} limit={limit} />
             </div>
         </div>
     )

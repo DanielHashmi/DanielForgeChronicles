@@ -2,25 +2,25 @@
 import { get_blogs, get_blogs_count } from "@/actions/actions"
 import BlogCards from "@/components/BlogComponents/BlogCards"
 import LoadMoreButton from "@/components/OverallComponents/LoadMoreButton"
-import { MD_DATA } from "@/types/interfaces"
+import { BLOGPOST } from "@/types/interfaces"
 import { useEffect, useState } from "react"
 
 let limit = 6;
 
-const ClientBlog = ({ blog_data_objects_array }: { blog_data_objects_array: { data: MD_DATA }[] }) => {
+const ClientBlog = ({ blog_data_objects_array }: { blog_data_objects_array: BLOGPOST[] }) => {
     const [initialBlogData, setInitialBlogData] = useState(blog_data_objects_array);
     const [search, setSearch] = useState('');
     const [blogs_for_searching, set_blogs_for_searching] = useState(blog_data_objects_array);
 
     const loadMoreFunc = async () => {
-        const new_blog_data_objects_array = await get_blogs(limit + 3) as unknown as { data: MD_DATA }[];
+        const new_blog_data_objects_array = await get_blogs(limit + 3);
         setInitialBlogData(new_blog_data_objects_array);
         limit += 3
     }
 
     useEffect(() => {
         const searchedBlogs = blogs_for_searching.filter((blog) => {
-            return (blog.data.title).toLowerCase().includes(search.toLowerCase())
+            return (blog.title).toLowerCase().includes(search.toLowerCase())
         })
         setInitialBlogData(search === '' ? blogs_for_searching.slice(0, limit) : searchedBlogs)
     }, [search, blog_data_objects_array, blogs_for_searching])
@@ -28,7 +28,7 @@ const ClientBlog = ({ blog_data_objects_array }: { blog_data_objects_array: { da
 
     const startSearch = async () => {
         const all_blogs_count = await get_blogs_count();
-        const all_blogs = await get_blogs(all_blogs_count) as unknown as { data: MD_DATA }[];
+        const all_blogs = await get_blogs(all_blogs_count);
         set_blogs_for_searching(all_blogs)
     }
 
@@ -43,7 +43,6 @@ const ClientBlog = ({ blog_data_objects_array }: { blog_data_objects_array: { da
 
                 <BlogCards blog_data_objects_array={initialBlogData} />
                 <LoadMoreButton data={initialBlogData} loadMoreFunc={loadMoreFunc} limit={limit} />
-
             </div>
         </main >
     )

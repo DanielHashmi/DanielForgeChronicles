@@ -1,6 +1,6 @@
 'use server'
 import clientPromise from '@/mongodb/connect';
-import { BOOK_DB_DATA } from '@/types/interfaces';
+import { BLOGPOST, BOOK_DB_DATA } from '@/types/interfaces';
 import { transformerCopyButton } from '@rehype-pretty/transformers';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeDocument from 'rehype-document';
@@ -15,6 +15,8 @@ import matter from 'gray-matter';
 import path from 'path'
 import fs from 'fs'
 import { generateEmail } from '@/helpers/files/functions';
+import { client } from '@/sanity/utils/client';
+import { all_blogs_query } from '@/sanity/grok/queries';
 
 // Convert Markdown to HTML Function
 const convertMdToHtml = async (filePath: string) => {
@@ -29,14 +31,14 @@ const convertMdToHtml = async (filePath: string) => {
 
 // Blogs
 export const get_blogs = async (limit: number) => {
-    const blog_data_objects_array = await convertMdToHtml('src/blogs');
+    const blog_data_objects_array: BLOGPOST[] = await client.fetch(all_blogs_query);
     return blog_data_objects_array.slice(0, limit);
 }
 
 
 // Blogs Count
 export const get_blogs_count = async () => {
-    const blog_data_objects_array = fs.readdirSync(path.join(process.cwd(), 'src', 'blogs'));
+    const blog_data_objects_array: BLOGPOST[] = await client.fetch(`*[_type == 'blogpost']`);
     return blog_data_objects_array.length || 0;
 }
 
@@ -243,7 +245,7 @@ export const handle_send = async (e: FormData) => { // Work Here
 
 }
 
-// urls for generating sitemap
+// urls for generating sitemap work here
 export const get_urls = async (dir: string) => {
     const dir_path = path.join(process.cwd(), 'src', dir + 's');
     const urls = fs.readdirSync(dir_path, 'utf-8').map((name) => (

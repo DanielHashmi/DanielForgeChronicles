@@ -1,4 +1,26 @@
+import { SanityImageSource } from "@sanity/image-url/lib/types/types";
+
 // interfaces
+export interface BLOGPOST {
+    title: string;
+    name: string;
+    date: string;
+    slug: string;
+    image: SanityImageSource;
+    description: string;
+    content: { code: string; language: string };
+    author: { name: string; bio: string; slug: string; image: SanityImageSource };
+}
+export interface BOOK {
+    title: string;
+    date: string;
+    slug: string;
+    image: SanityImageSource;
+    description: string;
+    detail: string[];
+    author: { name: string; bio: string; slug: string; image: SanityImageSource };
+}
+
 export interface MD_DATA {
     title: string;
     author: string;
@@ -45,7 +67,7 @@ export interface MAIL_OPTIONS {
     attachments: {
         filename: string;
         content: string;
-    } [];
+    }[];
     from: string;
     to: string;
     subject: string;
@@ -53,5 +75,3 @@ export interface MAIL_OPTIONS {
 }
 // Types
 export type Convert_Md_To_Html = BOOK_DB_DATA | { data: MD_DATA }
-
-

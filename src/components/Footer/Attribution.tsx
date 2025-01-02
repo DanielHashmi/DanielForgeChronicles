@@ -16,36 +16,44 @@ const Attribution = () => {
                             DanielForgeChronicles
                         </a>
                         {" "}
-                        is licensed under{" "}
+                        is licensed under
                         <a
                             href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1"
                             target="_blank"
                             rel="license noopener noreferrer"
-                            className="font-semibold hover:underline px-4"
+                            className="font-semibold hover:underline pl-1"
                         >
                             Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
                         </a>
                     </p>
                     <div className="flex justify-center items-center gap-2">
-                        <img
-                            className="h-4"
+                        <Image
+                            className="size-4"
                             src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"
                             alt="CC"
+                            width={16}
+                            height={16}
                         />
-                        <img
-                            className="h-4"
+                        <Image
+                            className="size-4"
                             src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"
                             alt="BY"
+                            width={16}
+                            height={16}
                         />
-                        <img
-                            className="h-4"
+                        <Image
+                            className="size-4"
                             src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"
                             alt="NC"
+                            width={16}
+                            height={16}
                         />
-                        <img
-                            className="h-4"
+                        <Image
+                            className="size-4"
                             src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1"
                             alt="SA"
+                            width={16}
+                            height={16}
                         />
                     </div>
                     <p className="text-sm md:text-base text-gray-700 dark:text-foreground flex justify-center gap-2 px-4">

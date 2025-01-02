@@ -26,13 +26,25 @@ const withPWA = withPWAInit({
     // ... other options you like
   }
 });
-
 const nextConfig: NextConfig = {
   images: {
-    domains: ["lh3.googleusercontent.com"], // Add your allowed domains here
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mirrors.creativecommons.org',
+      },
+    ],
+    dangerouslyAllowSVG: true,
   },
   // Add other Next.js config options if needed
 };
 
 export default withPWA(nextConfig);
-

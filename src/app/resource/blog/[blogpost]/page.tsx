@@ -5,9 +5,7 @@ import PatrickHand_Regular from "@/app/fonts/Font_Objects/PatrickHand_Regular"
 import { notFound } from "next/navigation"
 
 // imports for typography and prettifying the blog content
-import fs from 'fs'
 import { unified } from 'unified'
-import matter from 'gray-matter'
 import remarkParse from 'remark-parse'
 import rehypeDocument from 'rehype-document'
 import remarkRehype from 'remark-rehype'
@@ -19,49 +17,42 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import ComicNeue_Regular from "@/app/fonts/Font_Objects/ComicNeue_Regular"
 import Navigation from "@/components/BlogComponents/Navigation"
-import path from 'path'
 import { Metadata } from "next"
+import { client } from "@/sanity/utils/client"
+import { blog_post_query } from "@/sanity/grok/queries"
+import { BLOGPOST } from "@/types/interfaces"
+import imgBuilder from "@/sanity/utils/imgBuilder"
 
 // Dynamically Generating Params at Build Time for the BlogPosts
 export const revalidate = 3600; // Rebuild the page
 export async function generateStaticParams() {
-    const folder_path = path.join(process.cwd(), 'src', 'blogs');
-    const file_names_array = fs.readdirSync(folder_path, 'utf-8');
-    const file_names_no_ext = file_names_array.map((filename) => {
-        const blogpost = filename.replace(/\.md$/, ''); // Remove file extension
-        return { blogpost };
-    });
-    return file_names_no_ext; // [{ blogpost: 'filename' }, { blogpost: 'filename' }]
+    const blogPostSlugs: { slug: string }[] = await client.fetch(`*[_type == 'blogpost']{
+        'blogpost':slug.current
+      }`);
+    return blogPostSlugs;
 }
-
 
 // Dynamically Generate Metadata for Each Blogpost
 export async function generateMetadata({ params }: { params: Promise<{ blogpost: string }> }): Promise<Metadata> {
-    const file_path = path.join(process.cwd(), 'src', 'blogs', `${(await params).blogpost}.md`);
-    const raw_data = fs.readFileSync(file_path, 'utf-8');
-    const { data } = matter(raw_data);
-
+    const blogPostData: BLOGPOST = (await client.fetch(blog_post_query((await params).blogpost)));
     return {
-        title: data.title,
-        description: data.desc,
+        title: blogPostData.title,
+        description: blogPostData.description,
         metadataBase: new URL(process.env.BASE_URL),
         openGraph: {
             images: [
-                { url: '/' + data.image }
+                { url: imgBuilder(blogPostData.image).width(1920).url() }
             ]
         }
     }
 }
 
-
 const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) => {
-    const file_path = path.join(process.cwd(), 'src', 'blogs', `${(await params).blogpost}.md`);
-    if (!fs.existsSync(file_path)) {
-        notFound();
-    }
-    const raw_data = fs.readFileSync(file_path, 'utf-8');
-    const { data, content } = matter(raw_data);
+    const blogPostData: BLOGPOST = (await client.fetch(blog_post_query((await params).blogpost)));
+    if (!blogPostData) return notFound();
+    const { data, content } = { data: blogPostData, content: blogPostData.content.code };
 
+    // make a function for this
     const html_file_content = (await unified()
         .use(remarkParse)
         .use(remarkRehype)
@@ -88,11 +79,11 @@ const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) =
                     <div>
                         <div className="flex items-center gap-2">
                             <Link href={'/'}>
-                                <Image className="rounded-full" src={'/danielcodeforge.png'} alt="logo" width={30} height={30} />
+                                <Image className="rounded-full" src={imgBuilder(data.author.image).width(100).url() || '/danielcodeforge.png'} alt="logo" width={30} height={30} />
                             </Link>
                             <div className="flex gap-3 items-center">
                                 <div className="font-semibold text-sm">
-                                    {data.author}
+                                    {data.author.name}
                                 </div>
                                 <div className="text-xs">{data.date}</div>
                             </div>
@@ -102,7 +93,7 @@ const BlogPost = async ({ params }: { params: Promise<{ blogpost: string }> }) =
                     <h1 className={`${ComicNeue_Regular.className} md:text-5xl sm:text-4xl text-3xl font-bold`}>{data.title}</h1>
 
                     <div className={`relative mr-8 sm:mr-0 xl:w-[60vw] md:h-[70vh] h-[30vh] sm:h-[40vh] rounded-xl transition-all duration-1000 cursor-pointer`}>
-                        <Image className="object-cover" src={`/${data.image || 'upcoming.png'}`} alt="logo" fill />
+                        <Image className="object-cover" src={imgBuilder(data.image).width(1920).url() || 'upcoming.png'} alt="logo" fill />
                     </div>
 
                     <p dangerouslySetInnerHTML={{ __html: html_file_content }} className={`${PatrickHand_Regular.className}
