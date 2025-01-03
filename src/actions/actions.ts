@@ -78,14 +78,14 @@ export const saveData = async () => {
 
 // Add or Delete Star For Book
 export const saveOrDeleteStar = async (email: string, slug: string) => {
-    const client = await clientPromise;
-    const db = client.db("danielforgechroniclesDB");
+    const mongoClient = await clientPromise;
+    const db = mongoClient.db("danielforgechroniclesDB");
     const book = await db.collection("books").findOne({ "slug": slug });
-    if (book) {
+    if (book.stared_users) {
         if (!book.stared_users.includes(email)) {
             await db.collection("books").updateOne({ "slug": slug }, { $set: { 'stared_users': [...book.stared_users, email] } });
         } else {
-            await db.collection("books").updateOne({ "slug": slug }, { $set: { 'stared_users': book.stared_users.filter((user) => user !== email) } });
+            await db.collection("books").updateOne({ "slug": slug }, { $set: { 'stared_users': book.stared_users.filter((user: string) => user !== email) } });
         }
     }
 }
