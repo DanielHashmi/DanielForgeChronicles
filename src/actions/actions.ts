@@ -81,17 +81,17 @@ export const saveOrDeleteStar = async (email: string, slug: string) => {
     const mongoClient = await clientPromise;
     const db = mongoClient.db("danielforgechroniclesDB");
 
-    // Use $addToSet or $pull to toggle
     const book = await db.collection("books").findOne({ slug });
     if (!book) {
         throw new Error("Book not found");
     }
-
-    const updateOperation: any = book.stared_users.includes(email)
+    
+    const updateOperation = book.stared_users.includes(email)
         ? { $pull: { stared_users: email } } // Remove user if already exists
         : { $addToSet: { stared_users: email } }; // Add user if not exists
 
-    const result = await db.collection("books").updateOne({ slug }, updateOperation);
+    const result = await db.collection("books").updateOne({ slug }, updateOperation as unknown as { [key: string]: { 'stared_users': string } });
+    console.log(updateOperation);
 
     return {
         success: result.modifiedCount > 0,
