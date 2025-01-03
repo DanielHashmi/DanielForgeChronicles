@@ -56,6 +56,11 @@ const bookSchema = defineType({
             validation: (Rule: ArrayRule<unknown>) => Rule.required()
         }),
         defineField({
+            name: 'buylink',
+            type: 'string',
+            title: 'Buy Link',
+        }),
+        defineField({
             name: 'file',
             type: 'file',
             title: 'File',

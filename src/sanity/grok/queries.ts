@@ -50,9 +50,10 @@ export const all_books_query = `*[_type == 'book'] | order(date desc){
     image
   },
   detail,
+  buylink,
   description,
    'file':file.asset->{
     url,
     originalFilename
-  }
+  },
 }`

@@ -19,6 +19,7 @@ export interface BOOK {
     description: string;
     detail: object[];
     author: { name: string; bio: string; slug: string; image: SanityImageSource };
+    buylink: string;
     file: { url: string; originalFilename: string };
 }
 

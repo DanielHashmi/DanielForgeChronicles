@@ -67,7 +67,7 @@ const BookCard = ({ data }: { data: BOOK }) => {
         <div className="bg-white dark:bg-[#292a2b] flex flex-col gap-4 smooth sm_scale text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
             <div className="flex items-center sm:items-start gap-6 flex-col sm:flex-row">
 
-                <a href={'https://hashmiverse56.gumroad.com/l/vhymr'}>
+                <a href={data.buylink}>
                     <div className="size-52 relative" >
                         <Image className="object-cover rounded-md" src={imgBuilder(data.image).width(720).url() || 'upcoming.png'} alt="image" fill />
                     </div>
@@ -99,7 +99,7 @@ const BookCard = ({ data }: { data: BOOK }) => {
                         </div>
                     </div>
                     <div className="flex gap-4 items-center w-full sm:justify-between relative">
-                        <a href={'https://hashmiverse56.gumroad.com/l/vhymr'}>
+                        <a href={data.buylink}>
                             <Button text='Buy It 💗' />
                         </a>
                         <div onClick={claim_book} className={`${claimed && 'opacity-50'}`}>
