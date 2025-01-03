@@ -20,9 +20,14 @@ const BookCard = ({ data }: { data: BOOK }) => {
     const [sendingEmail, setSendingEmail] = useState(false);
 
     const save_star_delete_star = async () => {
-        setAlreadyStared(!alreadyStared);
-        setStarCount(alreadyStared ? starCount - 1 : starCount + 1);
-        await saveOrDeleteStar(session?.user.email, data.slug)
+        const res = await saveOrDeleteStar(session?.user.email, data.slug)
+        if (res.action === 'added') {
+            setAlreadyStared(true);
+            setStarCount(starCount + 1);
+        } else {
+            setAlreadyStared(false);
+            setStarCount(starCount - 1);
+        }
     }
 
     const claim_book = async () => {
@@ -52,7 +57,7 @@ const BookCard = ({ data }: { data: BOOK }) => {
             setStarCount(stared_users.length);
         };
         get_stared_users();
-        
+
         // check claims initially
         const is_user_claimed = async () => {
             const claimed_users: string[] = await getClaimedUsers(data.slug);
