@@ -21,6 +21,7 @@ const BookCard = ({ data }: { data: BOOK }) => {
 
     const save_star_delete_star = async () => {
         setAlreadyStared(!alreadyStared);
+        setStarCount(alreadyStared ? starCount - 1 : starCount + 1);
         await saveOrDeleteStar(session?.user.email, data.slug)
     }
 
@@ -43,18 +44,16 @@ const BookCard = ({ data }: { data: BOOK }) => {
         }
     }
 
-    // check stars initially and so on
     useEffect(() => {
+        // check stars initially
         const get_stared_users = async () => {
             const stared_users: string[] = await getStaredUsers(data.slug);
             setAlreadyStared(stared_users.includes(session?.user.email));
             setStarCount(stared_users.length);
         };
         get_stared_users();
-    }, [session?.user.email, data.slug, alreadyStared])
-
-    // check claims initially and so on
-    useEffect(() => {
+        
+        // check claims initially
         const is_user_claimed = async () => {
             const claimed_users: string[] = await getClaimedUsers(data.slug);
             if (session?.user.email) setClaimed(claimed_users.includes(session?.user.email));
@@ -62,6 +61,7 @@ const BookCard = ({ data }: { data: BOOK }) => {
         };
         is_user_claimed();
     }, [session?.user.email, data.slug])
+
 
     return (
         <div className="bg-white dark:bg-[#292a2b] flex flex-col gap-4 smooth sm_scale text-start rounded-xl p-4 shadow-[0_0_7px_6px_#02020208]">
@@ -84,13 +84,13 @@ const BookCard = ({ data }: { data: BOOK }) => {
                         <div>
                             <span className="flex gap-2 items-center">
                                 <span className="text-xl">✉</span>
-                                <span className="font-bold flex items-center w-full justify-between">
+                                <span className="flex items-center w-full justify-between">
                                     <span>
-                                        <span>Published: </span>{data.date}
+                                        <span className="font-bold">Published: </span>{data.date}
                                     </span>
 
 
-                                    {<div className="text-lg" onClick={save_star_delete_star}>
+                                    {<div className="text-lg font-bold" onClick={save_star_delete_star}>
                                         {alreadyStared ? <span className='bg-[#f8f8f8] cursor-pointer dark:bg-background h-9 shadow w-12 items-center justify-center flex gap-1 rounded '>⭐{starCount}</span>
                                             : <span className="bg-[#f8f8f8] cursor-pointer h-9 dark:bg-background shadow rounded w-12 flex gap-1 items-center justify-center"><Image width={100} height={100} src="/star.svg" alt="star-icon" className='w-5 hover:scale-105 dark:invert' />{starCount}</span>}
                                     </div>}

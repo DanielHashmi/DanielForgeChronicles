@@ -56,7 +56,7 @@ export const generateEmail = (name: string, type: string) => {
             display: inline-block;
             color: black;
             padding: 6px 24px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
             transition: all ease .5s;
             text-decoration: none;
             border-radius: 50rem;
